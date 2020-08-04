@@ -6,7 +6,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean canMove(int destX, int destY) {
+    public boolean canMove(int destX, int destY, boolean specialMove) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;

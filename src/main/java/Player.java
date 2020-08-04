@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Player {
     private String name;
     private boolean white;
+    private boolean firstMove = true;
     boolean turn = false;
     private ArrayList<Piece> pieces = new ArrayList();
 
@@ -26,6 +27,10 @@ public class Player {
         return name;
     }
 
+    public void setFirstMove(boolean firstMove) {
+        this.firstMove = firstMove;
+    }
+
     public void removePiece(Piece piece) {
         this.pieces.remove(piece);
     }
@@ -44,8 +49,10 @@ public class Player {
         if (destPiece != null) {
             if (destPiece.getWhite() != movingPiece.getWhite()) {
                 //setting piece attribute
-                if (movingPiece.canMove(destX, destY)) {
-                    movingPiece.move(destX, destY);
+                boolean specialMove = false;
+                if (this.firstMove)  specialMove = true;
+                if (movingPiece.canMove(destX, destY, specialMove)) {
+                    movingPiece.move(destX, destY, specialMove);
                     //setting player attribute
                     opponent.removePiece(destPiece);
                     //setting board attribute
@@ -58,9 +65,11 @@ public class Player {
             // if the destination cell is empty
         } else {
             System.out.println("Destination cell is empty");
+            boolean specialMove = false;
+            if (this.firstMove)  specialMove = true;
             //setting piece attribute
-            if (movingPiece.canMove(destX, destY)) {
-                movingPiece.move(destX, destY);
+            if (movingPiece.canMove(destX, destY, specialMove)) {
+                movingPiece.move(destX, destY, specialMove);
                 //setting board attribute
                 //cleaning starting position and arriving position and moving the piece
                 board.setPieceAtCell(initX, initY, null);

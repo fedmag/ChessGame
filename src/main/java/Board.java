@@ -77,7 +77,7 @@ public class Board {
                     p2.addPiece(piece);
                 }
             }
-            }
+        }
     }
 
 }

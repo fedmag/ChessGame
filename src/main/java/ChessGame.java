@@ -41,11 +41,14 @@ public class ChessGame {
         String line = scanner.next();
         int x = Integer.parseInt(line.split(",")[0]);
         int y = Integer.parseInt(line.split(",")[1]);
+
         System.out.println("Destination cell");
         line = scanner.next();
         int destX = Integer.parseInt(line.split(",")[0]);
         int destY = Integer.parseInt(line.split(",")[1]);
+
         player.makeMove(board, opponent, x, y, destX, destY);
+        player.setFirstMove(false);
         board.drawBoard();
     }
 }
