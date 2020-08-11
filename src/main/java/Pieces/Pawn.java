@@ -9,20 +9,14 @@ public class Pawn extends Piece {
     @Override
     public boolean canMove(int destX, int destY, boolean specialMove) {
         if (legitMove(destX, destY)) {
+            int distX = this.getxPos() - destX;
+            int distY = this.getyPos() - destY;
             if (!specialMove) {
-                int distX = this.getxPos() - destX;
-                int distY = this.getyPos() - destY;
                 // Pawn only moves forward
-                if ((Math.abs(distX) == 1) && distY == 0) {
-                    return true;
-                } else return false;
+                return (Math.abs(distX) == 1) && distY == 0;
             } else {
-                int distX = this.getxPos() - destX;
-                int distY = this.getyPos() - destY;
                 // Pawn only moves forward
-                if ((Math.abs(distX) == 2) && distY == 0) {
-                    return true;
-                } else return false;
+                return (Math.abs(distX) == 2) && distY == 0 || (Math.abs(distX) == 1) && distY == 0; // normal move can still be performed
             }
         }
         else {

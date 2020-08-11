@@ -69,7 +69,7 @@ public class Board {
     public void givePiecesToPlayer (Board board, Player p1, Player p2) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Piece piece = movingPiece(i, j);
+                Piece piece = this.movingPiece(i, j);
                 if (piece != null && piece.getWhite() == p1.isWhite()) {
                     p1.addPiece(piece);
                 }
