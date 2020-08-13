@@ -19,7 +19,6 @@ public class GUIChess extends JFrame {
         setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE); // = 3 as int
         setResizable(false);
-        this.setMinimumSize(new Dimension(500,500));
         initSettings();
         this.makeGrid(this.board);
         setVisible(true); // must be the last one otherwise the buttons won't show up as this makes visible only what's there when it is called, not after
@@ -30,7 +29,7 @@ public class GUIChess extends JFrame {
         this.playing = true;
         // players
         this.p1 = new Player("Federico", true, true);
-        this.p2 = new Player("Cattivo", false, false);
+        this.p2 = new Player("Alfonso", false, false);
         System.out.println("Players created...");
         // logic Board
         this.board.buildBoard(this.p1, this.p2);
@@ -49,13 +48,20 @@ public class GUIChess extends JFrame {
                     String buttonName = (piece == null)? "" : piece.getPieceName();
                     button.setText(buttonName);
                     button.setFont(new Font("FreeSans", 5,20)); // nice
-//                    button.setFont(new Font("Yrsa Light", 5,25));
                     if (piece != null && piece.getWhite()) button.setForeground(Color.WHITE);
                     // getting the click
                     button.addActionListener(actionEvent -> {
                         System.out.println(button.getName() + " clicked");
-                        button.setBackground(Color.LIGHT_GRAY);
-                        playMove(button, this.p1, this.p2, this.board);
+
+                        if (GameFlow.playerCanMove(p1, board, button) && this.moveSequence.length() < 4){
+                            button.setBackground(Color.LIGHT_GRAY);
+                            playMove(button, this.p1, this.p2, this.board);
+                        }else if (GameFlow.playerCanMove(p2, board, button) && this.moveSequence.length() < 4) {
+                            button.setBackground(Color.LIGHT_GRAY);
+                            playMove(button, this.p2, this.p1, this.board);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "You cannot move now! " + GameFlow.whoseTurn(p1,p2));
+                        }
                     });
                     grid.add(button);
                 }
@@ -64,15 +70,18 @@ public class GUIChess extends JFrame {
         }
 
     private void playMove(CellButton button, Player p1, Player p2, Board board) {
+        GameFlow.whoseTurn(p1,p2);
         String coord = button.getName();
         this.moveSequence += coord;
         System.out.println("Sequence: " + this.moveSequence);
-        if (this.moveSequence.length() == 4) { // two buttons pressed
+        if (this.moveSequence.length() == 4) { // two cells selected
             GameFlow.playRound(this.moveSequence, p1, p2, board);
             this.moveSequence = "";
             // when making a move, redraw UI
             System.out.println("Redrawing grid..");
             this.updateUI(board, this.grid);
+            // changing turns
+            GameFlow.nextRound(p1, p2);
         } else {
             System.out.println("select next cell..");
         }

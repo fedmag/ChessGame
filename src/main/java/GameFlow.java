@@ -1,9 +1,10 @@
+import Pieces.Piece;
+import com.GUI.CellButton;
+
 import java.util.Scanner;
 
 public class GameFlow {
     public GameFlow () {}
-
-    public static String moveSequence = "";
 
     public static void nextRound(Player player, Player opponent) {
         player.turn = !player.turn;
@@ -25,6 +26,24 @@ public class GameFlow {
         board = player.makeMove(board, opponent, x, y, destX, destY);
         player.setFirstMove(false);
         System.out.println("____________");
-//        board.drawBoard();
+
+
+    }
+
+    public static boolean playerCanMove(Player p, Board board, CellButton button) {
+        int x = Integer.parseInt(button.getName().charAt(0) + "");
+        int y = Integer.parseInt(button.getName().charAt(1) + "");
+        Piece piece = board.pieceAtDest(x, y);
+        if (piece != null) {
+            if (p.turn && p.isWhite() == piece.getWhite() && piece.getWhite() != null) return true;
+            else return false;
+        } else if (p.turn) return true;
+        else return false;
+    }
+
+    public static String whoseTurn(Player p1, Player p2) {
+        if (p1.turn) return "\nTurn: " + p1.getName();
+        else if (p2.turn) return "\nTurn: " + p2.getName();
+        else return "Error! Turn not detected...";
     }
 }
