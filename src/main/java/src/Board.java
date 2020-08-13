@@ -1,3 +1,5 @@
+package src;
+
 import Pieces.*;
 
 public class Board {
@@ -45,7 +47,7 @@ public class Board {
     }
 
     public Piece pieceAtDest (int x, int y) {
-        if (! isEmpty(x,y)) return board[x][y].getPiece();
+        if (!isEmpty(x,y)) return board[x][y].getPiece();
         else return null;
     }
 
@@ -79,5 +81,4 @@ public class Board {
             }
         }
     }
-
 }

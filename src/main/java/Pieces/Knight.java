@@ -1,5 +1,7 @@
 package Pieces;
 
+import src.Board;
+
 public class Knight extends Piece {
     public Knight(Boolean white, int x, int y) {
         super("knight", white, x, y);
@@ -8,7 +10,7 @@ public class Knight extends Piece {
 
 
     @Override
-    public boolean canMove(int destX, int destY, boolean specialMove) {
+    public boolean canMove(int destX, int destY, boolean specialMove, Board board) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;

@@ -1,5 +1,10 @@
-import Pieces.Piece;
+package src;
 
+import Pieces.Pawn;
+import Pieces.Piece;
+import Pieces.Queen;
+
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Player {
@@ -41,22 +46,19 @@ public class Player {
         //we have to be sure that a player can move only pieces from his color
         if (this.isWhite() == movingPiece.getWhite()) {
             board = updateGame(board, opponent, movingPiece, destPiece, initX, initY, destX, destY);
-        } else System.out.println("You can only move your pieces");
+        } else JOptionPane.showMessageDialog(null, "You can only move pieces that belong to you!");
         return board;
     }
 
     public Board updateGame(Board board, Player opponent, Piece movingPiece, Piece destPiece, int initX, int initY, int destX, int destY) {
         // if the destination cell has a piece already
-        movingPiece.summary();
         if (destPiece != null) {
-                    destPiece.summary();
             if (destPiece.getWhite() != movingPiece.getWhite()) {
-
                 //setting piece attribute
                 boolean specialMove = false;
                 if (this.firstMove) specialMove = true;
-                if (movingPiece.canMove(destX, destY, specialMove)) {
-                    movingPiece.move(destX, destY, specialMove);
+                if (movingPiece.canMove(destX, destY, specialMove, board)) {
+                    movingPiece.move(destX, destY, specialMove, board);
                     //setting player attribute
                     opponent.removePiece(destPiece);
                     //setting board attribute
@@ -64,17 +66,25 @@ public class Player {
                     board.setPieceAtCell(initX, initY, null);
                     board.setPieceAtCell(destX, destY, null);
                     board.setPieceAtCell(destX, destY, movingPiece);
+                    if((movingPiece instanceof Pawn) && ((Pawn) movingPiece).checkPromotion()) {
+                        this.removePiece(movingPiece);
+                        Piece newQueen = new Queen(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos());
+                        this.addPiece(newQueen);
+                        board.setPieceAtCell(destX, destY, movingPiece);
+                        board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
+
+                    }
                     return board;
-                }
-            } else System.out.println("You cannot move there as there's another piece that belongs to you");
+                } else JOptionPane.showMessageDialog(null, "You cannot move there!");
+            } else JOptionPane.showMessageDialog(null, "You cannot move there, you already have a piece on that cell!");
             // if the destination cell is empty
         } else {
             System.out.println("Destination cell is empty");
             boolean specialMove = false;
             if (this.firstMove) specialMove = true;
             //setting piece attribute
-            if (movingPiece.canMove(destX, destY, specialMove)) {
-                movingPiece.move(destX, destY, specialMove);
+            if (movingPiece.canMove(destX, destY, specialMove, board)) {
+                movingPiece.move(destX, destY, specialMove, board);
                 //setting board attribute
                 //cleaning starting position and arriving position and moving the piece
                 board.setPieceAtCell(initX, initY, null);

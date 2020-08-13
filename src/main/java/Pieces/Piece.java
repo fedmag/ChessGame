@@ -1,4 +1,5 @@
 package Pieces;
+import src.Board;
 
 public abstract class Piece {
     // attributes
@@ -46,14 +47,14 @@ public abstract class Piece {
     }
 
     // methods
-    public void move(int destX, int destY, boolean specialMove) {
-        if (this.canMove(destX,destY, specialMove)) {
+    public void move(int destX, int destY, boolean specialMove, Board board) {
+        if (this.canMove(destX,destY, specialMove, board)){
             this.setxPos(destX);
             this.setyPos(destY);
         }
         this.summary();
     }
-    public abstract boolean canMove(int destX, int destY, boolean specialMove);
+    public abstract boolean canMove(int destX, int destY, boolean specialMove, Board board);
 
     public void summary() {
         System.out.println("Position is set to " + this.getxPos() + ":" + this.getyPos() + " for this " + this.getPieceName() + ", white: " + this.getWhite());

@@ -1,12 +1,14 @@
 package Pieces;
 
+import src.Board;
+
 public class Rook extends Piece {
     public Rook(Boolean white, int x, int y) {
         super("rook", white, x, y);
     }
 
     @Override
-    public boolean canMove(int destX, int destY, boolean specialMove) {
+    public boolean canMove(int destX, int destY, boolean specialMove, Board board) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;

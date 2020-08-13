@@ -1,3 +1,5 @@
+package src;
+
 import Pieces.Piece;
 import com.GUI.CellButton;
 
@@ -94,9 +96,9 @@ public class GUIChess extends JFrame {
         GameFlow.showMovesHistory();
     }
 
-    public static void main(String[] args) {
-        // initialize the GUI
-        GUIChess guiChess = new GUIChess(); // makeGrid is called in GUIChess constr.
-    }
+//    public static void main(String[] args) {
+//        // initialize the GUI
+//        GUIChess guiChess = new GUIChess(); // makeGrid is called in GUIChess constr.
+//    }
 }
 

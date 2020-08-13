@@ -1,3 +1,5 @@
+package src;
+
 import Pieces.Piece;
 
 public class Cell {
