@@ -47,8 +47,11 @@ public class Player {
 
     public Board updateGame(Board board, Player opponent, Piece movingPiece, Piece destPiece, int initX, int initY, int destX, int destY) {
         // if the destination cell has a piece already
+        movingPiece.summary();
         if (destPiece != null) {
+                    destPiece.summary();
             if (destPiece.getWhite() != movingPiece.getWhite()) {
+
                 //setting piece attribute
                 boolean specialMove = false;
                 if (this.firstMove) specialMove = true;

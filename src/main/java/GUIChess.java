@@ -52,15 +52,13 @@ public class GUIChess extends JFrame {
                     // getting the click
                     button.addActionListener(actionEvent -> {
                         System.out.println(button.getName() + " clicked");
-
-                        if (GameFlow.playerCanMove(p1, board, button) && this.moveSequence.length() < 4){
-                            button.setBackground(Color.LIGHT_GRAY);
-                            playMove(button, this.p1, this.p2, this.board);
-                        }else if (GameFlow.playerCanMove(p2, board, button) && this.moveSequence.length() < 4) {
-                            button.setBackground(Color.LIGHT_GRAY);
-                            playMove(button, this.p2, this.p1, this.board);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "You cannot move now! " + GameFlow.whoseTurn(p1,p2));
+                        if(this.moveSequence.length() == 0) { // first cell selected -> check if player can move that cell
+                            if (GameFlow.playerCanMove(p1, board, button)) playMove(button, this.p1, this.p2, this.board);
+                            else if (GameFlow.playerCanMove(p2, board, button)) playMove(button, this.p2, this.p1, this.board);
+                            else JOptionPane.showMessageDialog(null, "You cannot move now! " + GameFlow.whoseTurn(p1,p2));
+                        } else if (this.moveSequence.length() == 2) { // two cells selected -> no need to check
+                            if (p1.turn) playMove(button, this.p1, this.p2, this.board);
+                            else if (p2.turn) playMove(button, this.p2, this.p1, this.board);
                         }
                     });
                     grid.add(button);
@@ -70,19 +68,20 @@ public class GUIChess extends JFrame {
         }
 
     private void playMove(CellButton button, Player p1, Player p2, Board board) {
-        GameFlow.whoseTurn(p1,p2);
+        System.out.println(GameFlow.whoseTurn(p1,p2));
         String coord = button.getName();
         this.moveSequence += coord;
         System.out.println("Sequence: " + this.moveSequence);
         if (this.moveSequence.length() == 4) { // two cells selected
             GameFlow.playRound(this.moveSequence, p1, p2, board);
-            this.moveSequence = "";
+            this.moveSequence = ""; // resetting the sequence
             // when making a move, redraw UI
             System.out.println("Redrawing grid..");
             this.updateUI(board, this.grid);
             // changing turns
             GameFlow.nextRound(p1, p2);
         } else {
+
             System.out.println("select next cell..");
         }
     }
