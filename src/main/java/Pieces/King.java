@@ -14,13 +14,9 @@ public class King extends Piece {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
-            if ((distX == 1 || distX == -1) && (distY == 1 || distY == -1)) {
-                return true;
-            } else if ((distX == 1 || distX == -1) && destY == 0) {
-                return true;
-            } else if ((distY == 1 || distY == -1) && destX == 0) {
-                return true;
-            } else {
+            int euclDist = (int) Math.sqrt(Math.pow(distX, 2) + Math.pow(distY,2));
+            if (euclDist == 1) return true;
+            else {
                 System.err.println("This piece cannot move like this");
                 return false;
             }
