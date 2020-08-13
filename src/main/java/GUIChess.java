@@ -91,6 +91,7 @@ public class GUIChess extends JFrame {
         this.makeGrid(board);
         grid.revalidate();
         grid.repaint();
+        GameFlow.showMovesHistory();
     }
 
     public static void main(String[] args) {

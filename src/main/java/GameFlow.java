@@ -1,9 +1,13 @@
 import Pieces.Piece;
 import com.GUI.CellButton;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class GameFlow {
+    private  static List<Move> moves = new ArrayList<>();
     public GameFlow () {}
 
     public static void nextRound(Player player, Player opponent) {
@@ -22,12 +26,12 @@ public class GameFlow {
         int destX = Integer.parseInt(coord.charAt(2)+"");
         int destY = Integer.parseInt(coord.charAt(3)+"");
         System.out.println(""+destX+destY);
-
+        // adding move to history
+        moves.add(new Move(player, x, y, destX, destY, board));
+        // making the move
         board = player.makeMove(board, opponent, x, y, destX, destY);
         player.setFirstMove(false);
         System.out.println("____________");
-
-
     }
 
     public static boolean playerCanMove(Player p, Board board, CellButton button) {
@@ -45,5 +49,15 @@ public class GameFlow {
         if (p1.turn) return "\nTurn: " + p1.getName();
         else if (p2.turn) return "\nTurn: " + p2.getName();
         else return "Error! Turn not detected...";
+    }
+
+    public static void showMovesHistory() {
+        if(moves.size() > 0) {
+            Iterator<Move> movesIterator = moves.iterator();
+            for (Iterator<Move> it = movesIterator; it.hasNext(); ) {
+                Move m = it.next();
+                System.out.println(m.toString());
+            }
+        }
     }
 }
