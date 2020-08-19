@@ -14,6 +14,7 @@ public class Player {
     boolean turn = false;
     private ArrayList<Piece> pieces = new ArrayList();
 
+    //FIXME probably the firstMove is related to the pawn, so each pawn can move twice for its first move, might not be related with the match
     public Player(String name, boolean white, boolean startingPlayer) {
         this.name = name;
         this.white = white;
@@ -34,6 +35,10 @@ public class Player {
 
     public void setFirstMove(boolean firstMove) {
         this.firstMove = firstMove;
+    }
+
+    public boolean isFirstMove() {
+        return firstMove;
     }
 
     public void removePiece(Piece piece) {

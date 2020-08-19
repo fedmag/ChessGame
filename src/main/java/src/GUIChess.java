@@ -6,6 +6,9 @@ import com.GUI.CellButton;
 import javax.swing.*;
 import java.awt.*;
 
+//TODO:
+// - add an indicator for the selected piece
+// - add an indicator for the turn
 
 public class GUIChess extends JFrame {
 
@@ -39,7 +42,7 @@ public class GUIChess extends JFrame {
     }
 
     public void makeGrid(Board board) {
-            grid.setLayout(new GridLayout(8,8));
+            grid.setLayout(new GridLayout(8,10));
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     CellButton button = new CellButton(i, j);
@@ -54,13 +57,35 @@ public class GUIChess extends JFrame {
                     // getting the click
                     button.addActionListener(actionEvent -> {
                         System.out.println(button.getName() + " clicked");
-                        if(this.moveSequence.length() == 0) { // first cell selected -> check if player can move that cell
-                            if (GameFlow.playerCanMove(p1, board, button)) playMove(button, this.p1, this.p2, this.board);
-                            else if (GameFlow.playerCanMove(p2, board, button)) playMove(button, this.p2, this.p1, this.board);
-                            else JOptionPane.showMessageDialog(null, "You cannot move now! " + GameFlow.whoseTurn(p1,p2));
-                        } else if (this.moveSequence.length() == 2) { // two cells selected -> no need to check
-                            if (p1.turn) playMove(button, this.p1, this.p2, this.board);
-                            else if (p2.turn) playMove(button, this.p2, this.p1, this.board);
+//                        if(this.moveSequence.equals("")) { // first cell selected -> check if player can move that cell
+//                            if (GameFlow.playerCanMoveThisPiece(p1, board, button)) playMove(button, this.p1, this.p2, this.board);
+//                            else if (GameFlow.playerCanMoveThisPiece(p2, board, button)) playMove(button, this.p2, this.p1, this.board);
+//                            else JOptionPane.showMessageDialog(null, "You cannot move now! " + GameFlow.whoseTurn(p1,p2));
+//                        } else if (this.moveSequence.length() == 2) { // two cells selected -> no need to check
+//                            if (p1.turn) playMove(button, this.p1, this.p2, this.board);
+//                            else if (p2.turn) playMove(button, this.p2, this.p1, this.board);
+//                        }
+
+                        if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p1, board, button)) {
+                            playMove(button, this.p1, this.p2, this.board);
+                        } else if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p2, board, button)) {
+                            playMove(button, this.p2, this.p1, this.board);
+                        }
+                        // in this case I want to check if the piece selected can actually move like requested
+                        else if (this.moveSequence.length() == 2) {
+                            this.moveSequence += button.getName();
+                            if (p1.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p1)) {
+                                playMove(button, this.p1, this.p2, this.board);
+                            } else if (p2.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p2)) {
+                                playMove(button, this.p2, this.p1, this.board);
+                            } else {
+                                System.out.println(this.moveSequence);
+                                this.moveSequence = "";
+                                JOptionPane.showMessageDialog(null, "This piece is not able to perform this move \nChessGUI");
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "You cannot move this piece! " + GameFlow.whoseTurn(p1,p2));
                         }
                     });
                     grid.add(button);
@@ -74,7 +99,7 @@ public class GUIChess extends JFrame {
         String coord = button.getName();
         this.moveSequence += coord;
         System.out.println("Sequence: " + this.moveSequence);
-        if (this.moveSequence.length() == 4) { // two cells selected
+        if (this.moveSequence.length() > 3) { // two cells selected
             GameFlow.playRound(this.moveSequence, p1, p2, board);
             this.moveSequence = ""; // resetting the sequence
             // when making a move, redraw UI
@@ -83,7 +108,6 @@ public class GUIChess extends JFrame {
             // changing turns
             GameFlow.nextRound(p1, p2);
         } else {
-
             System.out.println("select next cell..");
         }
     }
@@ -95,10 +119,5 @@ public class GUIChess extends JFrame {
         grid.repaint();
         GameFlow.showMovesHistory();
     }
-
-//    public static void main(String[] args) {
-//        // initialize the GUI
-//        GUIChess guiChess = new GUIChess(); // makeGrid is called in GUIChess constr.
-//    }
 }
 

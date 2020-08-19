@@ -1,6 +1,10 @@
 package Pieces;
 import src.Board;
 
+//TODO:
+//  - add special moves that are still missing
+
+
 public abstract class Piece {
     // attributes
     private boolean white = false;

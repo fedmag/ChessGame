@@ -25,9 +25,9 @@ public class Move {
         String startName = movingPiece.getPieceName();
         if(this.destPiece != null) {
             destName = this.destPiece.getPieceName();
-            destName = this.destPiece.getWhite() ?  destName.concat("white") : destName.concat("black");
+            destName = this.destPiece.getWhite() ?  destName.concat(" white") : destName.concat(" black");
         }
-        startName = this.movingPiece.getWhite() ? startName.concat("white") : startName.concat("black");
+        startName = this.movingPiece.getWhite() ? startName.concat(" white") : startName.concat(" black");
         return "player: " + this.author + ", moveID: " + this.moveID + "\n from: " + this.fromCell + " to: "+ this.toCell +
                 "\n piece: " + startName + " -> " + destName;
     }

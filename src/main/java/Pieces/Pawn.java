@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class Pawn extends Piece {
     public Pawn(Boolean white, int x, int y) {
-        super("pawn ", white, x, y);
+        super("pawn", white, x, y);
     }
 
     public boolean checkPromotion() {
@@ -21,25 +21,28 @@ public class Pawn extends Piece {
         return false;
     }
 
+    //FIXME:
+
     @Override
     public boolean canMove(int destX, int destY, boolean specialMove, Board board) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
+            Piece pieceAtDest = board.pieceAtDest(destX, destY);
             if (!specialMove) {
-                Piece leftPiece = this.getyPos()-1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1): null;
-                Piece rightPiece = this.getyPos()+ 1 < 8 ?board.pieceAtDest(destX, this.getyPos() + 1): null;
-                // Pawn only moves forward or diagonally to eat
+                Piece leftPiece = this.getyPos() -1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1): null;
+                Piece rightPiece = this.getyPos() + 1 < 8 ? board.pieceAtDest(destX, this.getyPos() + 1): null;
+                // Pawn only moves forward (if the cell is empty) or diagonally to eat
                 if (this.getWhite()) { //if white
-                    if(distX == 1 && distY == 0) return true;
-                    else if (leftPiece != null && leftPiece.getWhite() != this.getWhite()) return true;
-                    else if (rightPiece != null && rightPiece.getWhite()!= this.getWhite()) return true;
+                    if(distX == 1 && distY == 0 && pieceAtDest == null ) return true;
+                    else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() && pieceAtDest != null) return true;
+                    else if (rightPiece != null && rightPiece.getWhite()!= this.getWhite() && pieceAtDest != null) return true;
                     else return false;
                 }
                 else { // if black
-                    if (distX == -1 && distY == 0) return true;
+                    if (distX == -1 && distY == 0 && pieceAtDest == null ) return true;
                     else if (leftPiece != null && leftPiece.getWhite() != this.getWhite()) return true;
-                    else if (rightPiece != null && rightPiece.getWhite()!= this.getWhite()) return true;
+                    else if (rightPiece != null && rightPiece.getWhite() != this.getWhite()) return true;
                     else return false;
                 }
             } else { // first move of the match

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+//TODO:
+// - winning conditions
+
 public class GameFlow {
     private  static List<Move> moves = new ArrayList<>();
     public GameFlow () {}
@@ -35,14 +38,14 @@ public class GameFlow {
         System.out.println("____________");
     }
 
-    public static boolean playerCanMove(Player p, Board board, CellButton button) {
+    public static boolean playerCanMoveThisPiece(Player p, Board board, CellButton button) {
         int x = Integer.parseInt(button.getName().charAt(0) + "");
         int y = Integer.parseInt(button.getName().charAt(1) + "");
         Piece piece = board.pieceAtDest(x, y);
-        if (piece != null) {
+        if (piece != null) { // selected cell has a piece
             if (p.turn && p.isWhite() == piece.getWhite() && piece.getWhite() != null) return true;
             else return false;
-        } else if (p.turn) return true;
+        } else if (p.turn) return true; // selected cell is empty
         else return false;
     }
 
@@ -60,5 +63,15 @@ public class GameFlow {
                 System.out.println(m.toString());
             }
         }
+    }
+
+    public static boolean pieceCanMoveLikeThat(Board board, String coord, Player player) {
+        int x = Integer.parseInt(coord.charAt(0)+"");
+        int y = Integer.parseInt(coord.charAt(1)+"");
+        int destX = Integer.parseInt(coord.charAt(2)+"");
+        int destY = Integer.parseInt(coord.charAt(3)+"");
+        Piece piece = board.pieceAtDest(x,y);
+        if (piece.canMove(destX, destY, player.isFirstMove(), board)) return true;
+        else return false;
     }
 }
