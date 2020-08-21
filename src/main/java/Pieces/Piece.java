@@ -4,6 +4,9 @@ import src.Board;
 //TODO:
 //  - add special moves that are still missing
 
+// FIXME:
+//  - I think pieces cannot jump so this must be fixed
+
 
 public abstract class Piece {
     // attributes

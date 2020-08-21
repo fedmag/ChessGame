@@ -22,4 +22,5 @@ public class CellButton extends JButton {
             else this.setBackground(new Color(222, 222, 186));
         }
     }
+
 }

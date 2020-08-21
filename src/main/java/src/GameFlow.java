@@ -73,7 +73,7 @@ public class GameFlow {
         int destX = Integer.parseInt(coord.charAt(2)+"");
         int destY = Integer.parseInt(coord.charAt(3)+"");
         Piece piece = board.pieceAtDest(x,y);
-        if (piece.canMove(destX, destY, player.isFirstMove(), board)) return true;
+        if (piece != null && piece.canMove(destX, destY, player.isFirstMove(), board)) return true;
         else return false;
     }
 

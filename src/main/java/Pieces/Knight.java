@@ -24,7 +24,6 @@ public class Knight extends Piece {
                 return true;
             }
             else {
-                System.err.println("This piece cannot move like this");
                 return false;
             }
 

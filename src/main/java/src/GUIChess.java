@@ -9,6 +9,7 @@ import java.awt.*;
 //TODO:
 // - add an indicator for the selected piece
 // - add an indicator for the turn
+// - add different color for available cells when selecting a piece
 
 public class GUIChess extends JFrame {
 
@@ -16,8 +17,9 @@ public class GUIChess extends JFrame {
     private Player p1;
     private Player p2;
     private final Board board = new Board();
-    private boolean playing;
+    private boolean playing = true;
     private String moveSequence = "";
+    private final CellButton[][] cellButtons = new CellButton[8][8];
 
     public GUIChess() {
         super("ChessGame");
@@ -46,45 +48,56 @@ public class GUIChess extends JFrame {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     CellButton button = new CellButton(i, j);
+                    this.cellButtons[i][j] = button;
                     String btnCoord = ""+i+j;
                     button.setName(btnCoord);
                     // naming the cell
                     Piece piece = board.pieceAtDest(i,j);
                     String buttonName = (piece == null)? "" : piece.getPieceName();
                     button.setText(buttonName);
-                    button.setFont(new Font("FreeSans", 5,20)); // nice
+                    button.setFont(new Font("FreeSans", Font.ITALIC,20)); // nice
+//                    this.cellButtons[i][j] = button;
                     if (piece != null && piece.getWhite()) button.setForeground(Color.WHITE);
                     // getting the click
                     button.addActionListener(actionEvent -> {
                         System.out.println(button.getName() + " clicked");
-
-                        if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p1, board, button)) {
-                            playMove(button, this.p1, this.p2, this.board);
-                        } else if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p2, board, button)) {
-                            playMove(button, this.p2, this.p1, this.board);
-                        }
-                        // in this case I want to check if the piece selected can actually move like requested
-                        else if (this.moveSequence.length() == 2) {
-                            this.moveSequence += button.getName();
-                            if (p1.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p1)) {
-                                playMove(button, this.p1, this.p2, this.board);
-                            } else if (p2.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p2)) {
-                                playMove(button, this.p2, this.p1, this.board);
-                            } else {
-                                System.out.println(this.moveSequence);
-                                this.moveSequence = "";
-                                JOptionPane.showMessageDialog(null, "This piece is not able to perform this move \nChessGUI");
-                            }
-                        }
-                        else {
-                            JOptionPane.showMessageDialog(null, "You cannot move this piece! " + GameFlow.whoseTurn(p1,p2));
-                        }
+                        this.buttonClicked(button, p1, p2, board);
                     });
                     grid.add(button);
                 }
             }
             add(grid);
         }
+
+    private void buttonClicked(CellButton button, Player p1, Player p2, Board board) {
+        // first move  of the round and p1 can move the selected piece
+        if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p1, board, button)) {
+            playMove(button, this.p1, this.p2, this.board);
+        // first move  of the round and p2 can move the selected piece
+        } else if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p2, board, button)) {
+            playMove(button, this.p2, this.p1, this.board);
+        }
+        // in this case I want to check if the piece selected can actually move like requested
+        else if (this.moveSequence.length() == 2) {
+            this.moveSequence += button.getName();
+            if (p1.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p1)) {
+                playMove(button, this.p1, this.p2, this.board);
+            } else if (p2.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p2)) {
+                playMove(button, this.p2, this.p1, this.board);
+            } else {
+                System.out.println(this.moveSequence);
+                this.moveSequence = "";
+                JOptionPane.showMessageDialog(null, "This piece is not able to perform this move \nChessGUI");
+                updateUI(board, grid);
+            }
+        }
+        // the player is trying to move a piece that does not belong to him/her
+        else {
+            JOptionPane.showMessageDialog(null, "You cannot move this piece! " + GameFlow.whoseTurn(p1,p2));
+            updateUI(board, grid);
+        }
+
+    }
 
     private void playMove(CellButton button, Player p1, Player p2, Board board) {
         System.out.println(GameFlow.whoseTurn(p1,p2));
@@ -101,10 +114,27 @@ public class GUIChess extends JFrame {
             GameFlow.nextRound(p1, p2);
         } else {
             System.out.println("select next cell..");
+            this.colorPossibleCells(button);
         }
         if (GameFlow.thereIsWinner(p1, p2)) {
             System.out.println("WE HAVE A WINNER!!!!!!!!!!!!!!!!!!!!!!!!");
-        };
+            this.playing = false; //TODO add a win screen
+        }
+    }
+
+    private void colorPossibleCells(CellButton button) {
+        String coord = button.getName();
+        int x = Integer.parseInt(coord.charAt(0)+"");
+        int y = Integer.parseInt(coord.charAt(1)+"");
+        Piece piece = board.pieceAtDest(x, y);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece otherCellPiece = board.pieceAtDest(i,j);
+                if (piece != null && otherCellPiece == null && piece.canMove(i,j,false,board)) {
+                    this.cellButtons[i][j].setBackground(Color.green);
+                }
+            }
+        }
     }
 
     public void updateUI (Board board, JPanel grid) {
