@@ -1,6 +1,8 @@
 package src;
 
+import Pieces.Pawn;
 import Pieces.Piece;
+import Pieces.Queen;
 import com.GUI.CellButton;
 
 import java.util.ArrayList;
@@ -72,6 +74,22 @@ public class GameFlow {
         int destY = Integer.parseInt(coord.charAt(3)+"");
         Piece piece = board.pieceAtDest(x,y);
         if (piece.canMove(destX, destY, player.isFirstMove(), board)) return true;
+        else return false;
+    }
+
+    public static void checkSpecialMoves(Player player, Piece movingPiece, Board board, int destX, int destY) {
+        // checking promotion for the pawn
+        if((movingPiece instanceof Pawn) && ((Pawn) movingPiece).checkPromotion()) {
+            player.removePiece(movingPiece);
+            Piece newQueen = new Queen(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos());
+            player.addPiece(newQueen);
+            board.setPieceAtCell(destX, destY, movingPiece);
+            board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
+        }
+    }
+
+    public static boolean thereIsWinner(Player p1, Player p2) {
+        if (!p1.kingAlive() || !p2.kingAlive()) return true;
         else return false;
     }
 }

@@ -6,6 +6,9 @@ import src.Board;
 import javax.swing.*;
 
 public class Pawn extends Piece {
+
+    boolean firstMove = true;
+
     public Pawn(Boolean white, int x, int y) {
         super("pawn", white, x, y);
     }
@@ -22,34 +25,62 @@ public class Pawn extends Piece {
     }
 
     //FIXME:
+    //  - adding the firstMove to each pawn causes them to always be able to move two squares
 
     @Override
     public boolean canMove(int destX, int destY, boolean specialMove, Board board) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
+            int absDistX = Math.abs(distX);
             Piece pieceAtDest = board.pieceAtDest(destX, destY);
+            if(pieceAtDest != null) System.out.println("+++++++++++++++++++++++" + pieceAtDest.getPieceName() + "++++++++++++++++++++++++++");
             if (!specialMove) {
-                Piece leftPiece = this.getyPos() -1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1): null;
+                Piece leftPiece = this.getyPos() - 1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1): null;
                 Piece rightPiece = this.getyPos() + 1 < 8 ? board.pieceAtDest(destX, this.getyPos() + 1): null;
                 // Pawn only moves forward (if the cell is empty) or diagonally to eat
                 if (this.getWhite()) { //if white
-                    if(distX == 1 && distY == 0 && pieceAtDest == null ) return true;
-                    else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() && pieceAtDest != null) return true;
-                    else if (rightPiece != null && rightPiece.getWhite()!= this.getWhite() && pieceAtDest != null) return true;
+                    if(distX == 1 && distY == 0 && pieceAtDest == null ) { // base movement
+                        this.firstMove = false;
+                        return true;
+                    }
+                    else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() // there s an opponent piece on the upper-left square
+                            && pieceAtDest == leftPiece // you want to move on that square
+                            && (distX == 1 && distY == 1)) { // and you're still respecting the base movement range
+                        this.firstMove = false;
+                        return true;
+                    }
+                    else if (rightPiece != null && rightPiece.getWhite()!= this.getWhite() // there s an opponent piece on the upper-right square
+                            && pieceAtDest == rightPiece // you want to move on that square
+                            && (distX == 1 && distY == -1)) { // and you're still respecting the base movement range
+                        this.firstMove = false;
+                        return true;
+                    }
                     else return false;
                 }
                 else { // if black
-                    if (distX == -1 && distY == 0 && pieceAtDest == null ) return true;
-                    else if (leftPiece != null && leftPiece.getWhite() != this.getWhite()) return true;
-                    else if (rightPiece != null && rightPiece.getWhite() != this.getWhite()) return true;
+                    if(distX == -1 && distY == 0 && pieceAtDest == null ) { // base movement
+                        this.firstMove = false;
+                        return true;
+                    }
+                    else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() // there s an opponent piece on the lower-left square
+                            && pieceAtDest == leftPiece // you want to move on that square
+                            && (distX == -1 && distY == 1)) { // and you're still respecting the base movement range
+                        this.firstMove = false;
+                        return true;
+                    }
+                    else if (rightPiece != null && rightPiece.getWhite()!= this.getWhite() // there s an opponent piece on the lower-right square
+                            && pieceAtDest == rightPiece // you want to move on that square
+                            && (distX == -1 && distY == -1)) { // and you're still respecting the base movement range
+                        this.firstMove = false;
+                        return true;
+                    }
                     else return false;
                 }
             } else { // first move of the match
-                return (Math.abs(distX) == 2) && distY == 0 || (Math.abs(distX) == 1) && distY == 0; // normal move can still be performed
+                return (absDistX == 2) && distY == 0 || (absDistX == 1) && distY == 0; // normal move can still be performed
             }
         } else {
-            JOptionPane.showMessageDialog(null, "This piece cannot move like this");
             return false;
         }
     }

@@ -1,13 +1,16 @@
 package src;
 
+import Pieces.King;
 import Pieces.Pawn;
 import Pieces.Piece;
 import Pieces.Queen;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Player {
+
     private String name;
     private boolean white;
     private boolean firstMove = true;
@@ -71,14 +74,7 @@ public class Player {
                     board.setPieceAtCell(initX, initY, null);
                     board.setPieceAtCell(destX, destY, null);
                     board.setPieceAtCell(destX, destY, movingPiece);
-                    if((movingPiece instanceof Pawn) && ((Pawn) movingPiece).checkPromotion()) {
-                        this.removePiece(movingPiece);
-                        Piece newQueen = new Queen(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos());
-                        this.addPiece(newQueen);
-                        board.setPieceAtCell(destX, destY, movingPiece);
-                        board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
-
-                    }
+                    GameFlow.checkSpecialMoves(this, movingPiece, board, destX, destY);
                     return board;
                 } else JOptionPane.showMessageDialog(null, "You cannot move there!");
             } else JOptionPane.showMessageDialog(null, "You cannot move there, you already have a piece on that cell!");
@@ -103,5 +99,13 @@ public class Player {
 
     public void printPiecesLeft() {
         System.out.println(this.pieces.toString());
+    }
+
+    public boolean kingAlive() {
+        Iterator<Piece> iter = this.pieces.iterator();
+        for (Iterator<Piece> it = iter; it.hasNext(); ) {
+            Piece p = it.next();
+            if (p.getPieceName().equals("king")) return true;
+        } return false;
     }
 }

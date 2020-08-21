@@ -57,14 +57,6 @@ public class GUIChess extends JFrame {
                     // getting the click
                     button.addActionListener(actionEvent -> {
                         System.out.println(button.getName() + " clicked");
-//                        if(this.moveSequence.equals("")) { // first cell selected -> check if player can move that cell
-//                            if (GameFlow.playerCanMoveThisPiece(p1, board, button)) playMove(button, this.p1, this.p2, this.board);
-//                            else if (GameFlow.playerCanMoveThisPiece(p2, board, button)) playMove(button, this.p2, this.p1, this.board);
-//                            else JOptionPane.showMessageDialog(null, "You cannot move now! " + GameFlow.whoseTurn(p1,p2));
-//                        } else if (this.moveSequence.length() == 2) { // two cells selected -> no need to check
-//                            if (p1.turn) playMove(button, this.p1, this.p2, this.board);
-//                            else if (p2.turn) playMove(button, this.p2, this.p1, this.board);
-//                        }
 
                         if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p1, board, button)) {
                             playMove(button, this.p1, this.p2, this.board);
@@ -110,6 +102,9 @@ public class GUIChess extends JFrame {
         } else {
             System.out.println("select next cell..");
         }
+        if (GameFlow.thereIsWinner(p1, p2)) {
+            System.out.println("WE HAVE A WINNER!!!!!!!!!!!!!!!!!!!!!!!!");
+        };
     }
 
     public void updateUI (Board board, JPanel grid) {

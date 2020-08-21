@@ -22,8 +22,8 @@ public class Board {
         board[0][3].setPiece(new Queen(false, 0,3));
         board[0][4].setPiece(new King(false, 0,4));
         board[0][5].setPiece(new Bishop(false, 0,5));
-        board[0][6].setPiece(new Rook(false, 0,6));
-        board[0][7].setPiece(new Knight(false, 0,7));
+        board[0][6].setPiece(new Knight(false, 0,6));
+        board[0][7].setPiece(new Rook(false, 0,7));
         // adding white pieces
         board[7][0].setPiece(new Rook(true, 7,0));
         board[7][1].setPiece(new Knight(true, 7,1));
@@ -31,8 +31,8 @@ public class Board {
         board[7][3].setPiece(new Queen(true, 7,3));
         board[7][4].setPiece(new King(true, 7,4));
         board[7][5].setPiece(new Bishop(true, 7,5));
-        board[7][6].setPiece(new Rook(true, 7,6));
-        board[7][7].setPiece(new Knight(true, 7,7));
+        board[7][6].setPiece(new Knight(true, 7,6));
+        board[7][7].setPiece(new Rook(true, 7,7));
 
         givePiecesToPlayer(this, p1, p2);
     }
