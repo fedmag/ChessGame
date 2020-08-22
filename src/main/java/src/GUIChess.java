@@ -54,7 +54,8 @@ public class GUIChess extends JFrame {
                     // naming the cell
                     Piece piece = board.pieceAtDest(i,j);
                     String buttonName = (piece == null)? "" : piece.getPieceName();
-                    button.setText(buttonName);
+//                    button.setText(buttonName);
+                    this.associateIcon(button, piece);
                     button.setFont(new Font("FreeSans", Font.ITALIC,20)); // nice
 //                    this.cellButtons[i][j] = button;
                     if (piece != null && piece.getWhite()) button.setForeground(Color.WHITE);
@@ -68,6 +69,42 @@ public class GUIChess extends JFrame {
             }
             add(grid);
         }
+
+    private void associateIcon(CellButton button, Piece piece) {
+        if (piece != null){
+            if (piece.getPieceName().equals("bishop")) {
+                if (piece.getWhite())
+                    button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/white-bishop-50.png"));
+                else button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/icons8-bishop-50-2.png"));
+            }
+            if (piece.getPieceName().equals("knight")) {
+                if (piece.getWhite())
+                    button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/white-knight-50.png"));
+                else button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/icons8-knight-50-2.png"));
+            }
+            if (piece.getPieceName().equals("rook")) {
+                if (piece.getWhite())
+                    button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/white-rook-50.png"));
+                else button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/icons8-rook-50-2.png"));
+            }
+            if (piece.getPieceName().equals("pawn")) {
+                if (piece.getWhite())
+                    button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/white-pawn-50.png"));
+                else button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/icons8-pawn-50-2.png"));
+            }
+            if (piece.getPieceName().equals("queen")) {
+                if (piece.getWhite())
+                    button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/white-queen-50.png"));
+                else button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/icons8-queen-50-2.png"));
+            }
+            if (piece.getPieceName().equals("king")) {
+                if (piece.getWhite())
+                    button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/white-king-50.png"));
+                else button.setIcon(new ImageIcon("src/main/resources/icons/50px/chessIcons/icons8-king-50-2.png"));
+            }
+
+        }
+    }
 
     private void buttonClicked(CellButton button, Player p1, Player p2, Board board) {
         // first move  of the round and p1 can move the selected piece

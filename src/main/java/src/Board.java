@@ -42,6 +42,11 @@ public class Board {
         return board[x][y] == null;
     }
 
+    public boolean cellAtIsEmpty (int x, int y) {
+        Piece piece = pieceAtDest(x,y);
+        return piece == null;
+    }
+
     public Piece movingPiece (int x, int y) {
         return board[x][y].getPiece();
     }
@@ -80,5 +85,9 @@ public class Board {
                 }
             }
         }
+    }
+
+    public Cell getCell (int x, int y) {
+        return board[x][y];
     }
 }
