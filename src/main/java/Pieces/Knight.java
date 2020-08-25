@@ -7,19 +7,18 @@ public class Knight extends Piece {
         super("knight", white, x, y);
     }
 
-
+// TODO as each piece knows the board we can check for the destination piece inside the can move method
 
     @Override
     public boolean canMove(int destX, int destY, Board board) {
         if (legitMove(destX, destY)) {
+            Piece pieceAtDest = board.pieceAtDest(destX, destY);
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
-            if ((Math.abs(distX) == 2) && (Math.abs(distY) == 1)) {
-//                this.summary();
+            if ((Math.abs(distX) == 2) && (Math.abs(distY) == 1) && pieceAtDest != null && pieceAtDest.getWhite() != this.getWhite()) {
                 return true;
             }
-            else if ((Math.abs(distX) == 1) && (Math.abs(distY) == 2)) {
-//                this.summary();
+            else if ((Math.abs(distX) == 1) && (Math.abs(distY) == 2) && pieceAtDest != null && pieceAtDest.getWhite() != this.getWhite()) {
                 return true;
             }
             else {
