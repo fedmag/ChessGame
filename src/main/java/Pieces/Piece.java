@@ -54,14 +54,14 @@ public abstract class Piece {
     }
 
     // methods
-    public void move(int destX, int destY, boolean specialMove, Board board) {
-        if (this.canMove(destX,destY, specialMove, board)){
+    public void move(int destX, int destY, Board board) {
+        if (this.canMove(destX,destY, board)){
             this.setxPos(destX);
             this.setyPos(destY);
         }
         this.summary();
     }
-    public abstract boolean canMove(int destX, int destY, boolean specialMove, Board board);
+    public abstract boolean canMove(int destX, int destY, Board board);
 
     public void summary() {
         System.out.println("Position is set to " + this.getxPos() + ":" + this.getyPos() + " for this " + this.getPieceName() + ", white: " + this.getWhite());

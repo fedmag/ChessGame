@@ -35,8 +35,7 @@ public class GameFlow {
         // adding move to history
         moves.add(new Move(player, x, y, destX, destY, board));
         // making the move
-        board = player.makeMove(board, opponent, x, y, destX, destY);
-        player.setFirstMove(false);
+        player.makeMove(board, opponent, x, y, destX, destY);
         System.out.println("____________");
     }
 
@@ -73,19 +72,23 @@ public class GameFlow {
         int destX = Integer.parseInt(coord.charAt(2)+"");
         int destY = Integer.parseInt(coord.charAt(3)+"");
         Piece piece = board.pieceAtDest(x,y);
-        if (piece != null && piece.canMove(destX, destY, player.isFirstMove(), board)) return true;
+        System.out.println(piece.shortSummary());
+        if (piece != null && piece.canMove(destX, destY, board)) return true;
         else return false;
     }
 
     public static void checkSpecialMoves(Player player, Piece movingPiece, Board board, int destX, int destY) {
         // checking promotion for the pawn
         if((movingPiece instanceof Pawn) && ((Pawn) movingPiece).checkPromotion()) {
+//            System.out.println(((Pawn) movingPiece).isFirstMove());
             player.removePiece(movingPiece);
             Piece newQueen = new Queen(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos());
             player.addPiece(newQueen);
             board.setPieceAtCell(destX, destY, movingPiece);
             board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
         }
+        // TODO checking for en passant
+        // TODO checking for arrocco
     }
 
     public static boolean thereIsWinner(Player p1, Player p2) {

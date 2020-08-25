@@ -8,7 +8,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean canMove(int destX, int destY, boolean specialMove, Board board) {
+    public boolean canMove(int destX, int destY, Board board) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
@@ -17,7 +17,7 @@ public class Rook extends Piece {
                 return true;
             }
             else {
-                System.err.println("This piece cannot move like this");
+//                System.err.println("This piece cannot move like this");
                 return false;
             }
         } else return false;

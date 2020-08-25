@@ -62,7 +62,11 @@ public class GUIChess extends JFrame {
                     // getting the click
                     button.addActionListener(actionEvent -> {
                         System.out.println(button.getName() + " clicked");
-                        this.buttonClicked(button, p1, p2, board);
+                        int x = Integer.parseInt(button.getName().charAt(0)+"");
+                        int y = Integer.parseInt(button.getName().charAt(1)+"");
+                        // Ignore click on empty cell as first click of the round
+                        if (board.cellAtIsEmpty(x,y) && this.moveSequence.equals("")) {System.out.println("Select a piece to move..");}
+                        else this.buttonClicked(button, p1, p2, board);
                     });
                     grid.add(button);
                 }
@@ -107,22 +111,25 @@ public class GUIChess extends JFrame {
     }
 
     private void buttonClicked(CellButton button, Player p1, Player p2, Board board) {
-        // first move  of the round and p1 can move the selected piece
+        //FIXME make it not possible to select an empty cell at the start
+        // first move of the round and p1 can move the selected piece
         if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p1, board, button)) {
+            button.setBackground(Color.red);
             playMove(button, this.p1, this.p2, this.board);
         // first move  of the round and p2 can move the selected piece
         } else if (this.moveSequence.equals("") && GameFlow.playerCanMoveThisPiece(p2, board, button)) {
+            button.setBackground(Color.red);
             playMove(button, this.p2, this.p1, this.board);
         }
         // in this case I want to check if the piece selected can actually move like requested
         else if (this.moveSequence.length() == 2) {
             this.moveSequence += button.getName();
-            if (p1.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p1)) {
+            if (p1.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p1)) {  // p1's turn
                 playMove(button, this.p1, this.p2, this.board);
-            } else if (p2.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p2)) {
+            } else if (p2.turn && GameFlow.pieceCanMoveLikeThat(board, this.moveSequence, p2)) { // p2's turn
                 playMove(button, this.p2, this.p1, this.board);
-            } else {
-                System.out.println(this.moveSequence);
+            } else { // invalid move
+                System.out.println("Invalid move" + this.moveSequence);
                 this.moveSequence = "";
                 JOptionPane.showMessageDialog(null, "This piece is not able to perform this move \nChessGUI");
                 updateUI(board, grid);
@@ -167,7 +174,9 @@ public class GUIChess extends JFrame {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Piece otherCellPiece = board.pieceAtDest(i,j);
-                if (piece != null && otherCellPiece == null && piece.canMove(i,j,false,board)) {
+                if (piece != null && otherCellPiece == null && piece.canMove(i,j,board)) {
+                    this.cellButtons[i][j].setBackground(Color.green);
+                } else if (piece != null && otherCellPiece != null && piece.canMove(i,j,board) && otherCellPiece.getWhite() != piece.getWhite()){
                     this.cellButtons[i][j].setBackground(Color.green);
                 }
             }

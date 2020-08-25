@@ -13,11 +13,9 @@ public class Player {
 
     private String name;
     private boolean white;
-    private boolean firstMove = true;
     boolean turn = false;
     private ArrayList<Piece> pieces = new ArrayList();
 
-    //FIXME probably the firstMove is related to the pawn, so each pawn can move twice for its first move, might not be related with the match
     public Player(String name, boolean white, boolean startingPlayer) {
         this.name = name;
         this.white = white;
@@ -36,24 +34,22 @@ public class Player {
         return name;
     }
 
-    public void setFirstMove(boolean firstMove) {
-        this.firstMove = firstMove;
-    }
-
-    public boolean isFirstMove() {
-        return firstMove;
-    }
-
     public void removePiece(Piece piece) {
         this.pieces.remove(piece);
     }
 
+
+    // TODO this checks might be implemented in the Piece abstract class or in the various piece classes
     public Board makeMove(Board board, Player opponent, int initX, int initY, int destX, int destY) {
         Piece movingPiece = board.movingPiece(initX, initY);
         Piece destPiece = board.pieceAtDest(destX, destY);
         //we have to be sure that a player can move only pieces from his color
         if (this.isWhite() == movingPiece.getWhite()) {
-            board = updateGame(board, opponent, movingPiece, destPiece, initX, initY, destX, destY);
+            // if we are moving on a cell with an opponent piece
+            if(destPiece != null && destPiece.getWhite() != movingPiece.getWhite()) board = updateGame(board, opponent, movingPiece, destPiece, initX, initY, destX, destY);
+            // the destination cell is empty
+            else if (destPiece == null) board = updateGame(board, opponent, movingPiece, destPiece, initX, initY, destX, destY);
+            else System.out.println("There is a piece belonging to you here");
         } else JOptionPane.showMessageDialog(null, "You can only move pieces that belong to you!");
         return board;
     }
@@ -61,12 +57,11 @@ public class Player {
     public Board updateGame(Board board, Player opponent, Piece movingPiece, Piece destPiece, int initX, int initY, int destX, int destY) {
         // if the destination cell has a piece already
         if (destPiece != null) {
+            // not trying to eat your own piece
             if (destPiece.getWhite() != movingPiece.getWhite()) {
                 //setting piece attribute
-                boolean specialMove = false;
-                if (this.firstMove) specialMove = true;
-                if (movingPiece.canMove(destX, destY, specialMove, board)) {
-                    movingPiece.move(destX, destY, specialMove, board);
+                if (movingPiece.canMove(destX, destY,board)) {
+                    movingPiece.move(destX, destY, board);
                     //setting player attribute
                     opponent.removePiece(destPiece);
                     //setting board attribute
@@ -81,11 +76,11 @@ public class Player {
             // if the destination cell is empty
         } else {
             System.out.println("Destination cell is empty");
-            boolean specialMove = false;
-            if (this.firstMove) specialMove = true;
+//            boolean specialMove = false;
+//            if (this.firstMove) specialMove = true;
             //setting piece attribute
-            if (movingPiece.canMove(destX, destY, specialMove, board)) {
-                movingPiece.move(destX, destY, specialMove, board);
+            if (movingPiece.canMove(destX, destY, board)) {
+                movingPiece.move(destX, destY, board);
                 //setting board attribute
                 //cleaning starting position and arriving position and moving the piece
                 board.setPieceAtCell(initX, initY, null);

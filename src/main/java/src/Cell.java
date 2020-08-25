@@ -5,6 +5,7 @@ import Pieces.Piece;
 public class Cell {
     private int x,y;
     private Piece piece;
+    private char[] lettersOnTheBoard = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     public Cell (int x, int y, Piece piece) {
         this.piece = piece;
@@ -26,5 +27,10 @@ public class Cell {
 
     public int getY() {
         return y;
+    }
+
+    public String standardNameCell () {
+        int standardNumbOrder = 8 - this.x;
+        return "" + standardNumbOrder + lettersOnTheBoard[this.y];
     }
 }

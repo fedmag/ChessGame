@@ -13,7 +13,7 @@ public class Bishop extends Piece{
     private ArrayList<Cell> availableCells = new ArrayList<>();
 
     @Override
-    public boolean canMove(int destX, int destY, boolean specialMove, Board board) {
+    public boolean canMove(int destX, int destY, Board board) {
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
