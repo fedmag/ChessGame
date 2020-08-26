@@ -2,12 +2,20 @@ package Pieces;
 
 import src.Board;
 
+import java.util.ArrayList;
+
 public class King extends Piece {
+
+     private boolean castlingDone = false;
+
+     //TODO there is probably a better way of implementing this
+     ArrayList<Boolean> emptyCellsLeft = new ArrayList<>();
+     ArrayList<Boolean> emptyCellsRight = new ArrayList<>();
+
+
     public King(Boolean white, int x, int y) {
         super("king", white, x, y);
     }
-
-
 
     @Override
     public boolean canMove(int destX, int destY, Board board) {
@@ -20,9 +28,33 @@ public class King extends Piece {
                 if (pieceAtDest != null && pieceAtDest.getWhite() == this.getWhite()) return false;
                 else return true;
             }
-            else {
-                return false;
+            // special check for castling
+            else if (pieceAtDest instanceof Rook && pieceAtDest.getWhite() == this.getWhite()
+                    && !this.castlingDone && !((Rook) pieceAtDest).isCastlingDone()) {
+                // need to check that the space between them is empty
+                int dist = this.getyPos() - pieceAtDest.getyPos();
+                if (dist > 0) { // dist > 0 means we gotta look at the left of the king
+                    //checking left
+                    for (int i = 1; i < dist; i++) {
+                        if (board.cellAtIsEmpty(this.getxPos(), this.getyPos() - i)) this.emptyCellsLeft.add(true);
+                        if (this.emptyCellsLeft.size() == dist) return true;
+                    }
+                } else { // dist < 0 we look at the right
+                    dist = Math.abs(dist);
+                    for (int i = 1; i < dist; i++) {
+                        if (board.cellAtIsEmpty(this.getxPos(), this.getyPos() + i)) this.emptyCellsLeft.add(true);
+                        if (this.emptyCellsLeft.size() == dist) return true;
+                    }
+                }
             }
-        } else return false;
+        } return false;
+    }
+
+    public boolean isCastlingDone() {
+        return castlingDone;
+    }
+
+    public void setCastlingDone(boolean castlingDone) {
+        this.castlingDone = castlingDone;
     }
 }

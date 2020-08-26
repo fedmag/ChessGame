@@ -1,8 +1,6 @@
 package src;
 
-import Pieces.Pawn;
-import Pieces.Piece;
-import Pieces.Queen;
+import Pieces.*;
 import com.GUI.CellButton;
 
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.List;
 
 public class GameFlow {
     private  static List<Move> moves = new ArrayList<>();
+
     public GameFlow () {}
 
     public static void nextRound(Player player, Player opponent) {
@@ -80,7 +79,6 @@ public class GameFlow {
     public static void checkSpecialMoves(Player player, Piece movingPiece, Board board, int destX, int destY) {
         // checking promotion for the pawn
         if((movingPiece instanceof Pawn) && ((Pawn) movingPiece).checkPromotion()) {
-//            System.out.println(((Pawn) movingPiece).isFirstMove());
             player.removePiece(movingPiece);
             Piece newQueen = new Queen(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos());
             player.addPiece(newQueen);
@@ -88,7 +86,48 @@ public class GameFlow {
             board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
         }
         // TODO checking for en passant
-        // TODO checking for arrocco
+        // TODO checking for castling
+        if (movingPiece instanceof King ) {
+            Piece pieceAtDest = board.pieceAtDest(destX, destY);
+            if (pieceAtDest instanceof  Rook && !((King) movingPiece).isCastlingDone() && !((Rook) pieceAtDest).isCastlingDone()) {
+                // now castling is performed
+                ((King) movingPiece).setCastlingDone(true);
+                ((Rook) pieceAtDest).setCastlingDone(true);
+                int kingX  = movingPiece.getxPos();
+                int kingY  = movingPiece.getyPos();
+                // moving the pieces
+                int dist = kingY - pieceAtDest.getyPos();
+                if(dist > 0) {// castling with the rook on the left
+                    // cleaning and removing
+                    player.removePiece(movingPiece);
+                    player.removePiece(pieceAtDest);
+                    board.setPieceAtCell(kingX, kingY, null);
+                    board.setPieceAtCell(pieceAtDest.getxPos(), pieceAtDest.getyPos(), null);
+                    // creating to pieces with new coordinates
+                    Piece newKing = new King (movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos() -2);
+                    Piece newRook = new Rook(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos() - 1);
+                    //adding those pieces to both the player and the board
+                    player.addPiece(newKing);
+                    player.addPiece(newRook);
+                    board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos() -2, newKing);
+                    board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos() - 1, newRook);
+                } else { // castling on the right
+                    // cleaning and removing
+                    player.removePiece(movingPiece);
+                    player.removePiece(pieceAtDest);
+                    board.setPieceAtCell(kingX, kingY, null);
+                    board.setPieceAtCell(pieceAtDest.getxPos(), pieceAtDest.getyPos(), null);
+                    // creating to pieces with new coordinates
+                    Piece newKing = new King (movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos() + 2);
+                    Piece newRook = new Rook(movingPiece.getWhite(), movingPiece.getxPos(), movingPiece.getyPos() + 1);
+                    //adding those pieces to both the player and the board
+                    player.addPiece(newKing);
+                    player.addPiece(newRook);
+                    board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos() + 2, newKing);
+                    board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos() + 1, newRook);
+                }
+            }
+        }
     }
 
     public static boolean thereIsWinner(Player p1, Player p2) {

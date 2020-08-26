@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Rook extends Piece {
 
     private ArrayList<Cell> availableCells = new ArrayList<>();
+    private boolean castlingDone = false;
 
     public Rook(Boolean white, int x, int y) {
         super("rook", white, x, y);
@@ -92,6 +93,14 @@ public class Rook extends Piece {
                 } else break;
             }
         }
+    }
+
+    public boolean isCastlingDone() {
+        return castlingDone;
+    }
+
+    public void setCastlingDone(boolean castlingDone) {
+        this.castlingDone = castlingDone;
     }
 }
 

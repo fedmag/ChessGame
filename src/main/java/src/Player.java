@@ -49,7 +49,8 @@ public class Player {
             if(destPiece != null && destPiece.getWhite() != movingPiece.getWhite()) board = updateGame(board, opponent, movingPiece, destPiece, initX, initY, destX, destY);
             // the destination cell is empty
             else if (destPiece == null) board = updateGame(board, opponent, movingPiece, destPiece, initX, initY, destX, destY);
-            else System.out.println("There is a piece belonging to you here");
+            // in case the clicked cell contains another piece belonging to this player I check for casteling
+            else GameFlow.checkSpecialMoves(this, movingPiece, board, destX,destY);
         } else JOptionPane.showMessageDialog(null, "You can only move pieces that belong to you!");
         return board;
     }
@@ -72,12 +73,10 @@ public class Player {
                     GameFlow.checkSpecialMoves(this, movingPiece, board, destX, destY);
                     return board;
                 } else JOptionPane.showMessageDialog(null, "You cannot move there!");
-            } else JOptionPane.showMessageDialog(null, "You cannot move there, you already have a piece on that cell!");
+            } else GameFlow.checkSpecialMoves(this, movingPiece, board, destX, destY);
             // if the destination cell is empty
         } else {
             System.out.println("Destination cell is empty");
-//            boolean specialMove = false;
-//            if (this.firstMove) specialMove = true;
             //setting piece attribute
             if (movingPiece.canMove(destX, destY, board)) {
                 movingPiece.move(destX, destY, board);
@@ -86,6 +85,7 @@ public class Player {
                 board.setPieceAtCell(initX, initY, null);
                 board.setPieceAtCell(destX, destY, null);
                 board.setPieceAtCell(destX, destY, movingPiece);
+                GameFlow.checkSpecialMoves(this, movingPiece, board, destX, destY);
                 return board;
             }
         }

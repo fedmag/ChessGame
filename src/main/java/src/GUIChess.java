@@ -13,7 +13,8 @@ import java.awt.*;
 
 public class GUIChess extends JFrame {
 
-    private JPanel grid;
+    private JPanel mainPanel, grid, menu;
+
     private Player p1;
     private Player p2;
     private final Board board = new Board();
@@ -23,11 +24,22 @@ public class GUIChess extends JFrame {
 
     public GUIChess() {
         super("ChessGame");
-        setSize(800, 800);
+        setSize(900, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE); // = 3 as int
         setResizable(false);
         initSettings();
+
+        mainPanel = new JPanel(); // main panel
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+        grid = new JPanel(); // sub-panel 1
+        menu = new JPanel();
+        menu.setSize(100, this.getHeight());
+        mainPanel.add(grid);
+        mainPanel.add(menu);
+
+        add(mainPanel);
         this.makeGrid(this.board);
+        this.createMenu();
         setVisible(true); // must be the last one otherwise the buttons won't show up as this makes visible only what's there when it is called, not after
     }
 
@@ -44,7 +56,7 @@ public class GUIChess extends JFrame {
     }
 
     public void makeGrid(Board board) {
-            grid.setLayout(new GridLayout(8,10));
+            grid.setLayout(new GridLayout(8,8));
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     CellButton button = new CellButton(i, j);
@@ -71,8 +83,14 @@ public class GUIChess extends JFrame {
                     grid.add(button);
                 }
             }
-            add(grid);
-        }
+            add(mainPanel);
+    }
+
+
+    public void createMenu () {
+        JLabel label = new JLabel(GameFlow.whoseTurn(p1,p2));
+        menu.add(label);
+    }
 
     private void associateIcon(CellButton button, Piece piece) {
         if (piece != null){
@@ -132,13 +150,13 @@ public class GUIChess extends JFrame {
                 System.out.println("Invalid move" + this.moveSequence);
                 this.moveSequence = "";
                 JOptionPane.showMessageDialog(null, "This piece is not able to perform this move \nChessGUI");
-                updateUI(board, grid);
+                updateUI(board, mainPanel);
             }
         }
         // the player is trying to move a piece that does not belong to him/her
         else {
             JOptionPane.showMessageDialog(null, "You cannot move this piece! " + GameFlow.whoseTurn(p1,p2));
-            updateUI(board, grid);
+            updateUI(board, mainPanel);
         }
 
     }
@@ -152,8 +170,8 @@ public class GUIChess extends JFrame {
             GameFlow.playRound(this.moveSequence, p1, p2, board);
             this.moveSequence = ""; // resetting the sequence
             // when making a move, redraw UI
-            System.out.println("Redrawing grid..");
-            this.updateUI(board, this.grid);
+            System.out.println("Redrawing mainPanel..");
+            this.updateUI(board, this.mainPanel);
             // changing turns
             GameFlow.nextRound(p1, p2);
         } else {
@@ -183,7 +201,7 @@ public class GUIChess extends JFrame {
         }
     }
 
-    public void updateUI (Board board, JPanel grid) {
+    public void updateUI (Board board, JPanel mainPanel) {
         grid.removeAll();
         this.makeGrid(board);
         grid.revalidate();
@@ -191,4 +209,3 @@ public class GUIChess extends JFrame {
         GameFlow.showMovesHistory();
     }
 }
-
