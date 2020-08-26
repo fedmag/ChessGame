@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class Pawn extends Piece {
 
-    private boolean actuallyMovedAlready = false;
+    private boolean movedAlready = false;
 
     public Pawn(Boolean white, int x, int y) {
         super("pawn", white, x, y);
@@ -23,7 +23,6 @@ public class Pawn extends Piece {
         }
         return false;
     }
-
     //FIXME:
     //  - adding the firstMove to each pawn causes them to always be able to move two squares
 
@@ -35,7 +34,7 @@ public class Pawn extends Piece {
             int distY = this.getyPos() - destY;
             int absDistX = Math.abs(distX);
             Piece pieceAtDest = board.pieceAtDest(destX, destY);
-            if (this.actuallyMovedAlready) { // not the first move of this pawn
+            if (this.movedAlready) { // not the first move of this pawn
                 // in order to eat diagonally we check the pieces at the left and at the right
                 Piece leftPiece = this.getyPos() - 1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1) : null;
                 Piece rightPiece = this.getyPos() + 1 < 8 ? board.pieceAtDest(destX, this.getyPos() + 1) : null;
@@ -87,6 +86,6 @@ public class Pawn extends Piece {
     @Override
     public void move(int destX, int destY, Board board) {
         super.move(destX, destY, board);
-        this.actuallyMovedAlready = true;
+        this.movedAlready = true;
     }
 }

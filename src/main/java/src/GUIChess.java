@@ -9,7 +9,6 @@ import java.awt.*;
 //TODO:
 // - add an indicator for the selected piece
 // - add an indicator for the turn
-// - add different color for available cells when selecting a piece
 
 public class GUIChess extends JFrame {
 
@@ -17,8 +16,7 @@ public class GUIChess extends JFrame {
 
     private Player p1;
     private Player p2;
-    private final Board board = new Board();
-    private boolean playing = true;
+    private Board board = new Board();
     private String moveSequence = "";
     private final CellButton[][] cellButtons = new CellButton[8][8];
 
@@ -36,7 +34,6 @@ public class GUIChess extends JFrame {
         menu.setSize(100, this.getHeight());
         mainPanel.add(grid);
         mainPanel.add(menu);
-
         add(mainPanel);
         this.makeGrid(this.board);
         this.createMenu();
@@ -45,10 +42,20 @@ public class GUIChess extends JFrame {
 
     private void initSettings() {
         // initializing:
-        this.playing = true;
         // players
-        this.p1 = new Player("Federico", true, true);
-        this.p2 = new Player("Alfonso", false, false);
+        String whitePlayerName = (String)JOptionPane.showInputDialog(
+                this,
+                "Choose white player name...",
+                "Player names...",
+                JOptionPane.PLAIN_MESSAGE);
+        String blackPlayerName = (String)JOptionPane.showInputDialog(
+                this,
+                "Choose black player name...",
+                "Player names...",
+                JOptionPane.PLAIN_MESSAGE);
+
+        this.p1 = new Player(whitePlayerName, true, true);
+        this.p2 = new Player(blackPlayerName, false, false);
         System.out.println("Players created...");
         // logic Board
         this.board.buildBoard(this.p1, this.p2);
@@ -89,6 +96,21 @@ public class GUIChess extends JFrame {
 
     public void createMenu () {
         JLabel label = new JLabel(GameFlow.whoseTurn(p1,p2));
+//        TextField player1Name = new TextField("White player name..", 30);
+//        JTextField player2Name = new JTextField("Black player name..", 30);
+//        JButton confirmNames = new JButton("Confirm");
+//        confirmNames.addActionListener(ActiveEvent -> {
+//            if(!player1Name.getText().equals("") && !player2Name.getText().equals("")) {
+//                p1.setName(player1Name.getText());
+//                p2.setName(player2Name.getText());
+//                menu.setVisible(false);
+//            } else {
+//                System.out.println(player1Name.getText());
+//            }
+//        });
+//        menu.add(player1Name);
+//        menu.add(player2Name);
+//        menu.add(confirmNames);
         menu.add(label);
     }
 
@@ -158,7 +180,6 @@ public class GUIChess extends JFrame {
             JOptionPane.showMessageDialog(null, "You cannot move this piece! " + GameFlow.whoseTurn(p1,p2));
             updateUI(board, mainPanel);
         }
-
     }
 
     private void playMove(CellButton button, Player p1, Player p2, Board board) {
@@ -179,9 +200,28 @@ public class GUIChess extends JFrame {
             this.colorPossibleCells(button);
         }
         if (GameFlow.thereIsWinner(p1, p2)) {
-            System.out.println("WE HAVE A WINNER!!!!!!!!!!!!!!!!!!!!!!!!");
-            this.playing = false; //TODO add a win screen
+            this.winScreen();
         }
+    }
+
+    private void winScreen() {
+        System.out.println("WE HAVE A WINNER!!!!!!!!!!!!!!!!!!!!!!!!");
+        JPopupMenu popup = new JPopupMenu();
+        JLabel label = new JLabel(GameFlow.whoWon(p1, p2));
+        JButton resetButton = new JButton("Restart");
+        resetButton.addActionListener(ActionEvent -> {
+            this.restartGame();
+            popup.setVisible(false);
+        });
+        popup.setPopupSize(300, 300);
+        popup.setLocation(400, 400);
+        popup.add(label);
+        popup.add(resetButton);
+        popup.setVisible(true);
+    }
+
+    private void restartGame() {
+        GUIChess guiChess = new GUIChess();
     }
 
     private void colorPossibleCells(CellButton button) {

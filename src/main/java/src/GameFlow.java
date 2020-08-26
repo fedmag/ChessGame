@@ -86,7 +86,8 @@ public class GameFlow {
             board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
         }
         // TODO checking for en passant
-        // TODO checking for castling
+
+        // checking for castling
         if (movingPiece instanceof King ) {
             Piece pieceAtDest = board.pieceAtDest(destX, destY);
             if (pieceAtDest instanceof  Rook && !((King) movingPiece).isCastlingDone() && !((Rook) pieceAtDest).isCastlingDone()) {
@@ -133,5 +134,13 @@ public class GameFlow {
     public static boolean thereIsWinner(Player p1, Player p2) {
         if (!p1.kingAlive() || !p2.kingAlive()) return true;
         else return false;
+    }
+
+    public static String whoWon (Player p1, Player p2) {
+        if (thereIsWinner(p1, p2)) {
+            if (p1.kingAlive()) return p1.getName();
+            else return p2.getName();
+        }
+        return "";
     }
 }

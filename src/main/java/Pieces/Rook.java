@@ -102,5 +102,11 @@ public class Rook extends Piece {
     public void setCastlingDone(boolean castlingDone) {
         this.castlingDone = castlingDone;
     }
+
+    @Override
+    public void move(int destX, int destY, Board board) {
+        super.move(destX, destY, board);
+        this.castlingDone = true;
+    }
 }
 

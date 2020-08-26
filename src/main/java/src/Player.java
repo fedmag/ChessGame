@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 public class Player {
 
-    private String name;
+    private String name = "";
     private boolean white;
     boolean turn = false;
     private ArrayList<Piece> pieces = new ArrayList();
@@ -102,5 +102,9 @@ public class Player {
             Piece p = it.next();
             if (p.getPieceName().equals("king")) return true;
         } return false;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
