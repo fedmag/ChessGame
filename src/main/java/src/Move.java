@@ -48,4 +48,8 @@ public class Move {
         return "player: " + this.author + ", moveID: " + this.moveID + "\n " + this.startCell.standardNameCell() + " -> "+ this.landCell.standardNameCell() +
                 "\n piece: " + startName + " -> " + destName;
     }
+
+    public String cellMove() {
+        return this.startCell.standardNameCell() + " -> "+ this.landCell.standardNameCell();
+    }
 }

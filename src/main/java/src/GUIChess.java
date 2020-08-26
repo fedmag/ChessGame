@@ -14,6 +14,8 @@ public class GUIChess extends JFrame {
 
     private JPanel mainPanel, grid, menu;
 
+    JTextArea movesList = new JTextArea();
+
     private Player p1;
     private Player p2;
     private Board board = new Board();
@@ -95,22 +97,9 @@ public class GUIChess extends JFrame {
 
 
     public void createMenu () {
+        menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         JLabel label = new JLabel(GameFlow.whoseTurn(p1,p2));
-//        TextField player1Name = new TextField("White player name..", 30);
-//        JTextField player2Name = new JTextField("Black player name..", 30);
-//        JButton confirmNames = new JButton("Confirm");
-//        confirmNames.addActionListener(ActiveEvent -> {
-//            if(!player1Name.getText().equals("") && !player2Name.getText().equals("")) {
-//                p1.setName(player1Name.getText());
-//                p2.setName(player2Name.getText());
-//                menu.setVisible(false);
-//            } else {
-//                System.out.println(player1Name.getText());
-//            }
-//        });
-//        menu.add(player1Name);
-//        menu.add(player2Name);
-//        menu.add(confirmNames);
+        menu.add(movesList);
         menu.add(label);
     }
 
@@ -174,6 +163,7 @@ public class GUIChess extends JFrame {
                 JOptionPane.showMessageDialog(null, "This piece is not able to perform this move \nChessGUI");
                 updateUI(board, mainPanel);
             }
+            movesList.append(GameFlow.getLastMoveCells() + "\n");
         }
         // the player is trying to move a piece that does not belong to him/her
         else {
@@ -246,6 +236,9 @@ public class GUIChess extends JFrame {
         this.makeGrid(board);
         grid.revalidate();
         grid.repaint();
-        GameFlow.showMovesHistory();
+        menu.removeAll();
+        this.createMenu();
+        menu.revalidate();
+        menu.repaint();
     }
 }

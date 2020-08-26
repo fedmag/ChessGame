@@ -143,4 +143,9 @@ public class GameFlow {
         }
         return "";
     }
+
+    public static String getLastMoveCells() {
+        if (moves.size() != 0) return moves.get(moves.size() -1).cellMove();
+        return "";
+    }
 }
