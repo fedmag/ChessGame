@@ -23,4 +23,11 @@ public class CellButton extends JButton {
         }
     }
 
+    public int getCoordX() {
+        return this.x;
+    }
+
+    public int getCoordY() {
+        return this.y;
+    }
 }

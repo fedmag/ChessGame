@@ -1,17 +1,16 @@
 package src;
 
 import Pieces.*;
-import com.GUI.CellButton;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//TODO:
-// - winning conditions
+// FIXME history is like 1 step behind
 
 public class GameFlow {
-    private  static List<Move> moves = new ArrayList<>();
+    public  static List<Move> movesHistory = new ArrayList<>();
+    public static List<Cell> cellSequence = new ArrayList<>();
 
     public GameFlow () {}
 
@@ -20,33 +19,25 @@ public class GameFlow {
         opponent.turn = !opponent.turn;
     }
 
-    public static void playRound (String coord, Player player, Player opponent, Board board) {
-        System.out.println("____________");
-        System.out.println("Piece you want to move");
-        int x = Integer.parseInt(coord.charAt(0)+"");
-        int y = Integer.parseInt(coord.charAt(1)+"");
-        System.out.println(""+x+y);
-
-        System.out.println("Destination cell");
-        int destX = Integer.parseInt(coord.charAt(2)+"");
-        int destY = Integer.parseInt(coord.charAt(3)+"");
-        System.out.println(""+destX+destY);
-        // adding move to history
-        moves.add(new Move(player, x, y, destX, destY, board));
+    public static void playRound (List<Cell> cellSequence, Player player, Player opponent, Board board) {
+        int x = cellSequence.get(0).getX();
+        int y = cellSequence.get(0).getY();
+        int destX = cellSequence.get(1).getX();
+        int destY = cellSequence.get(1).getY();
         // making the move
         player.makeMove(board, opponent, x, y, destX, destY);
+        // adding move to history
+        movesHistory.add(new Move(player, x, y, destX, destY, board));
         System.out.println("____________");
     }
 
-    public static boolean playerCanMoveThisPiece(Player p, Board board, CellButton button) {
-        int x = Integer.parseInt(button.getName().charAt(0) + "");
-        int y = Integer.parseInt(button.getName().charAt(1) + "");
+    public static boolean playerCanMoveThisPiece(Player p, Board board, List<Cell> cellSequence) {
+        int x = cellSequence.get(0).getX();
+        int y = cellSequence.get(0).getY();
         Piece piece = board.pieceAtDest(x, y);
         if (piece != null) { // selected cell has a piece
-            if (p.turn && p.isWhite() == piece.getWhite() && piece.getWhite() != null) return true;
-            else return false;
-        } else if (p.turn) return true; // selected cell is empty
-        else return false;
+            return p.turn && p.isWhite() == piece.getWhite() && piece.getWhite() != null;
+        } else return p.turn; // selected cell is empty
     }
 
     public static String whoseTurn(Player p1, Player p2) {
@@ -56,8 +47,8 @@ public class GameFlow {
     }
 
     public static void showMovesHistory() {
-        if(moves.size() > 0) {
-            Iterator<Move> movesIterator = moves.iterator();
+        if(movesHistory.size() > 0) {
+            Iterator<Move> movesIterator = movesHistory.iterator();
             for (Iterator<Move> it = movesIterator; it.hasNext(); ) {
                 Move m = it.next();
                 System.out.println(m.toString());
@@ -65,15 +56,16 @@ public class GameFlow {
         }
     }
 
-    public static boolean pieceCanMoveLikeThat(Board board, String coord, Player player) {
-        int x = Integer.parseInt(coord.charAt(0)+"");
-        int y = Integer.parseInt(coord.charAt(1)+"");
-        int destX = Integer.parseInt(coord.charAt(2)+"");
-        int destY = Integer.parseInt(coord.charAt(3)+"");
-        Piece piece = board.pieceAtDest(x,y);
-        System.out.println(piece.shortSummary());
-        if (piece != null && piece.canMove(destX, destY, board)) return true;
-        else return false;
+    public static boolean pieceCanMoveLikeRequested(Board board, List<Cell> cells) {
+        if (cells.size() > 1){
+            int x = cells.get(0).getX();
+            int y = cells.get(0).getY();
+            int destX = cells.get(1).getX();
+            int destY = cells.get(1).getY();
+            Piece piece = board.pieceAtDest(x, y);
+            return piece != null && piece.canMove(destX, destY, board);
+        }
+        return false;
     }
 
     public static void checkSpecialMoves(Player player, Piece movingPiece, Board board, int destX, int destY) {
@@ -85,8 +77,7 @@ public class GameFlow {
             board.setPieceAtCell(destX, destY, movingPiece);
             board.setPieceAtCell(movingPiece.getxPos(), movingPiece.getyPos(), newQueen);
         }
-        // TODO checking for en passant
-
+        // EnPassant is checked in the pawn class
         // checking for castling
         if (movingPiece instanceof King ) {
             Piece pieceAtDest = board.pieceAtDest(destX, destY);
@@ -132,8 +123,7 @@ public class GameFlow {
     }
 
     public static boolean thereIsWinner(Player p1, Player p2) {
-        if (!p1.kingAlive() || !p2.kingAlive()) return true;
-        else return false;
+        return !p1.kingAlive() || !p2.kingAlive();
     }
 
     public static String whoWon (Player p1, Player p2) {
@@ -145,7 +135,11 @@ public class GameFlow {
     }
 
     public static String getLastMoveCells() {
-        if (moves.size() != 0) return moves.get(moves.size() -1).cellMove();
+        if (movesHistory.size() > 0) return movesHistory.get(movesHistory.size() -1).cellMove();
         return "";
+    }
+
+    public static int movesSize() {
+        return movesHistory.size();
     }
 }

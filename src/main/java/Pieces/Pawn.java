@@ -2,8 +2,8 @@ package Pieces;
 
 
 import src.Board;
-
-import javax.swing.*;
+import src.Cell;
+import src.GameFlow;
 
 public class Pawn extends Piece {
 
@@ -14,7 +14,7 @@ public class Pawn extends Piece {
     }
 
     public boolean checkPromotion() {
-        if(this.getWhite() && this.getxPos() == 0) {
+        if (this.getWhite() && this.getxPos() == 0) {
             System.out.println("this pawn is getting promoted!");
             return true;
         } else if (!this.getWhite() && this.getxPos() == 7) {
@@ -23,8 +23,6 @@ public class Pawn extends Piece {
         }
         return false;
     }
-    //FIXME:
-    //  - adding the firstMove to each pawn causes them to always be able to move two squares
 
     @Override
     public boolean canMove(int destX, int destY, Board board) {
@@ -34,12 +32,15 @@ public class Pawn extends Piece {
             int distY = this.getyPos() - destY;
             int absDistX = Math.abs(distX);
             Piece pieceAtDest = board.pieceAtDest(destX, destY);
+
             if (this.movedAlready) { // not the first move of this pawn
+                //checking for enpassant
                 // in order to eat diagonally we check the pieces at the left and at the right
                 Piece leftPiece = this.getyPos() - 1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1) : null;
                 Piece rightPiece = this.getyPos() + 1 < 8 ? board.pieceAtDest(destX, this.getyPos() + 1) : null;
                 // Pawn only moves forward (if the cell is empty) or diagonally to eat
                 if (this.getWhite()) { //if white
+                    if (enPassantAvailable(destX, destY)) return enPassantAvailable(destX, destY);
                     if (distX == 1 && distY == 0 && pieceAtDest == null) { // base movement
                         return true;
                     } else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() // there s an opponent piece on the upper-left square
@@ -50,11 +51,9 @@ public class Pawn extends Piece {
                             && pieceAtDest == rightPiece // you want to move on that square
                             && (distX == 1 && distY == -1)) { // and you're still respecting the base movement range
                         return true;
-                    } else {
-//                        System.out.println("white piece not able to move");
-                        return false;
-                    }
+                    } else return false;
                 } else { // if black
+                    if (enPassantAvailable(destX, destY)) return enPassantAvailable(destX, destY);
                     if (distX == -1 && distY == 0 && pieceAtDest == null) { // base movement
                         return true;
                     } else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() // there s an opponent piece on the lower-left square
@@ -68,16 +67,25 @@ public class Pawn extends Piece {
                     } else return false;
                 }
             } else { // first move of the match for that pawn
-                if ((absDistX == 2 && distY == 0) || ((absDistX == 1 && distY == 0))) { // normal move can still be performed
-                    return true;
-                }
+                return (absDistX == 2 && distY == 0) || ((absDistX == 1 && distY == 0)); // normal move can still be performed
             }
-        // not a legit move
-        } else {
-            return false;
+        // in general the move is not possible
+        } else return false;
+    }
+
+    public boolean enPassantAvailable(int destX, int destY) {
+        if ((this.getWhite() && this.getxPos() == 3) || (!this.getWhite() && this.getxPos() == 4)) { // white side
+            String[] cells = GameFlow.getLastMoveCells().split(" -> ");
+            String fromCell = cells[0];
+            String toCell = cells[1];
+            if (fromCell.charAt(0) == toCell.charAt(0)) {
+                int x = Integer.parseInt(String.valueOf(fromCell.charAt(1)));
+                int y = Integer.parseInt(String.valueOf(toCell.charAt(1)));
+                if (this.getWhite()) return Math.abs(x - y) == 2 && destX == this.getxPos() - 1 && destY == Cell.letterToNumb(fromCell.charAt(0));
+                else return Math.abs(x - y) == 2 && destX == this.getxPos() + 1 && destY == Cell.letterToNumb(fromCell.charAt(0));
+            }
         }
-    // in general the move is not possible
-    return false;
+        return false;
     }
 
     // the method has to be overrided because we want to store whether the piece was actually moved or not.
