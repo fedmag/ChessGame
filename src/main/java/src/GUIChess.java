@@ -20,8 +20,8 @@ public class GUIChess extends JFrame {
     private Player p1;
     private Player p2;
     private Board board = new Board();
-//    private String moveSequence = "";
     private final CellButton[][] cellButtons = new CellButton[8][8];
+
 
     public GUIChess() {
         super("ChessGame");
@@ -156,8 +156,8 @@ public class GUIChess extends JFrame {
         JButton resetButton = new JButton("Restart");
 
         resetButton.addActionListener(ActionEvent -> {
-            this.restartGame();
             popup.setVisible(false);
+            this.restartGame();
         });
         popup.setPopupSize(300, 300);
         popup.setLocation(400, 400);
@@ -166,10 +166,11 @@ public class GUIChess extends JFrame {
         popup.setVisible(true);
     }
 
+    //FIXME must find a way to restart the game in the same window
     private void restartGame() {
-        this.board = new Board();
-        this.initSettings();
-        this.makeGrid(this.board);
+        GameFlow.movesHistory.clear();
+        dispose();
+        GUIChess gui = new GUIChess();
     }
 
     private void colorPossibleCells(CellButton button) {
