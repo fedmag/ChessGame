@@ -1,6 +1,7 @@
 package chess.src;
 
 import chess.AI.FEN;
+import chess.GUI.WinScreen;
 import chess.pieces.*;
 import chess.GUI.CellButton;
 import chess.GUI.PlayerNames;
@@ -88,7 +89,6 @@ public class GUIChess extends JFrame {
             add(mainPanel);
     }
 
-    // FIXME refactor changing the sequence string to an array in GameFlow
     private void buttonClicked(CellButton button, Player p1, Player p2, Board board) {
         GameFlow.cellSequence.add(board.getCell(button.getCoordX(), button.getCoordY()));
         // first move  of the round and p1 can move the selected piece
@@ -127,12 +127,12 @@ public class GUIChess extends JFrame {
             GameFlow.playRound(GameFlow.cellSequence, p1, p2, board);
             GameFlow.cellSequence.clear(); // resetting the sequence
             // when making a move, redraw UI
-//            System.out.println("Redrawing mainPanel..");
+            System.out.println("Redrawing mainPanel..");
             this.updateUI(board);
             // changing turns
             GameFlow.nextRound(p1, p2);
         } else {
-//            System.out.println("select next cell..");
+            System.out.println("select next cell..");
             this.colorPossibleCells(button);
         }
         if (GameFlow.thereIsWinner(p1, p2)) {
@@ -145,26 +145,14 @@ public class GUIChess extends JFrame {
 //////////////////////////////////////////////////////
 
     private void winScreen() {
-        JPopupMenu popup = new JPopupMenu();
-        JLabel label = new JLabel(GameFlow.whoWon(p1, p2));
-        JButton resetButton = new JButton("Restart");
-
-        resetButton.addActionListener(ActionEvent -> {
-            popup.setVisible(false);
-            this.restartGame();
-        });
-        popup.setPopupSize(300, 300);
-        popup.setLocation(400, 400);
-        popup.add(label);
-        popup.add(resetButton);
-        popup.setVisible(true);
+        new WinScreen(GameFlow.whoWon(this.p1, this.p2));
+        dispose();
     }
 
-    //FIXME must find a way to restart the game in the same window
     private void restartGame() {
         GameFlow.movesHistory.clear();
         dispose();
-        PlayerNames playerNames = new PlayerNames();
+        new PlayerNames();
     }
 
     private void colorPossibleCells(CellButton button) {
@@ -204,9 +192,11 @@ public class GUIChess extends JFrame {
         }
     }
 
+    // FIXME fix the turn layout
     public void createMenu () {
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         turnPlayer.setText(GameFlow.whoseTurn(p1,p2));
+        movesList.setEditable(false);
         menu.add(movesList);
         menu.add(turnPlayer);
     }

@@ -28,7 +28,6 @@ public class GameFlow {
         player.makeMove(board, opponent, x, y, destX, destY);
         // adding move to history
         movesHistory.add(new Move(player, x, y, destX, destY, board));
-//        System.out.println("____________");
     }
 
     public static boolean playerCanMoveThisPiece(Player p, Board board, List<Cell> cellSequence) {
@@ -51,7 +50,7 @@ public class GameFlow {
             Iterator<Move> movesIterator = movesHistory.iterator();
             for (Iterator<Move> it = movesIterator; it.hasNext(); ) {
                 Move m = it.next();
-//                System.out.println(m.toString());
+                System.out.println(m.toString());
             }
         }
     }
