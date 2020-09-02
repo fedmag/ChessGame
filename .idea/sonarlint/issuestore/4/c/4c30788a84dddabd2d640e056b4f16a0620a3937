@@ -1,0 +1,13 @@
+
+P	java:S125N"<This block of commented-out lines of code should be removed.(¡Ğ¤
+
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Ğ´öŠûÿÿÿÿ
+W
+java:S1126L"AReplace this if-then-else statement by a single return statement.(‹Øğ
+H
+java:S1135"2Complete the task associated to this TODO comment.(ÓñàÍ
+@
+java:S5411G"*Use the primitive boolean expression here.(œî××
+V	java:S125C"<This block of commented-out lines of code should be removed.(Àƒ…üÿÿÿÿ
+Y
+java:S1134"DTake the required action to fix the issue indicated by this comment.(÷Æ”Z

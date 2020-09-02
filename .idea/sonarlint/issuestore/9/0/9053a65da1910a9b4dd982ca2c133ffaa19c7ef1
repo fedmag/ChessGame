@@ -1,0 +1,18 @@
+
+@
+java:S5411T"*Use the primitive boolean expression here.( „·§
+@
+java:S5411-"*Use the primitive boolean expression here.(¬™Ðå
+V	java:S125l"<This block of commented-out lines of code should be removed.(‡…ñŸøÿÿÿÿ
+h
+java:S37767"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(Ìñ¢Œ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ž¾‚õúÿÿÿÿ
+Q	java:S1077"<Method has 8 parameters, which is greater than 7 authorized.(Ìñ¢Œ
+Q	java:S125K"<This block of commented-out lines of code should be removed.(·¯Áß
+O
+java:S4973/"9Use the "equals" method if value comparison was intended.(†ã„¦
+T
+java:S4973;"9Use the "equals" method if value comparison was intended.(ÑÀÄãýÿÿÿÿ
+H
+java:S1135("2Complete the task associated to this TODO comment.(ÌÊàè
