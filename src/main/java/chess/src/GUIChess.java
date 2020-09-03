@@ -76,7 +76,6 @@ public class GUIChess extends JFrame {
                     if (piece != null && piece.getWhite()) button.setForeground(Color.WHITE);
                     // getting the click
                     button.addActionListener(actionEvent -> {
-                        String c = FEN.translateToFEN(board);
                         int x = Integer.parseInt(button.getName().charAt(0)+"");
                         int y = Integer.parseInt(button.getName().charAt(1)+"");
                         // Ignore click on empty cell as first click of the round
@@ -122,7 +121,6 @@ public class GUIChess extends JFrame {
     }
 
     private void playMove(CellButton button, Player p1, Player p2, Board board) {
-
         if (GameFlow.cellSequence.size() > 1) { // two cells selected
             GameFlow.playRound(GameFlow.cellSequence, p1, p2, board);
             GameFlow.cellSequence.clear(); // resetting the sequence
@@ -172,6 +170,7 @@ public class GUIChess extends JFrame {
     }
 
     public void updateUI (Board board) {
+        String c = FEN.translateToFEN(this.board, this.p1, this.p2);
         // grid
         grid.removeAll();
         this.makeGrid(board);

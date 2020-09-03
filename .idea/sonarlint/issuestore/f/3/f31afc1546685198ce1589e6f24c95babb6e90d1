@@ -1,12 +1,0 @@
-
-m
-java:S3776"RRefactor this method to reduce its Cognitive Complexity from 42 to the 15 allowed.(Éåþøúÿÿÿÿ
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Ð´öŠûÿÿÿÿ
-V
-java:S1126"AReplace this if-then-else statement by a single return statement.(­¹ún
-N
-java:S4973"9Use the "equals" method if value comparison was intended.(­¹ún
-O
-java:S4973 "9Use the "equals" method if value comparison was intended.(Ý¯Þ’
-H
-java:S1135"2Complete the task associated to this TODO comment.(æÊÚÅ

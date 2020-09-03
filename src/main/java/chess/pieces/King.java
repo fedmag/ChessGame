@@ -19,6 +19,8 @@ public class King extends Piece {
 
     @Override
     public boolean canMove(int destX, int destY, Board board) {
+        this.emptyCellsLeft.clear();
+        this.emptyCellsRight.clear();
         if (legitMove(destX, destY)) {
             int distX = this.getxPos() - destX;
             int distY = this.getyPos() - destY;
@@ -37,14 +39,14 @@ public class King extends Piece {
                     //checking left
                     for (int i = 1; i < dist; i++) {
                         if (board.cellAtIsEmpty(this.getxPos(), this.getyPos() - i)) this.emptyCellsLeft.add(true);
-                        if (this.emptyCellsLeft.size() == dist) return true;
                     }
+                    return (this.emptyCellsLeft.size() + 1) == dist;
                 } else { // dist < 0 we look at the right
                     dist = Math.abs(dist);
                     for (int i = 1; i < dist; i++) {
                         if (board.cellAtIsEmpty(this.getxPos(), this.getyPos() + i)) this.emptyCellsLeft.add(true);
-                        if (this.emptyCellsLeft.size() == dist) return true;
                     }
+                    return (this.emptyCellsLeft.size() + 1) == dist;
                 }
             }
         } return false;

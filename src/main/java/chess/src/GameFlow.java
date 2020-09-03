@@ -45,6 +45,13 @@ public class GameFlow {
         else return "Error! Turn not detected...";
     }
 
+    //FIXME bugged. When a wrong cell is clicked the turn changes
+    public static String whoseTurnColor (Player p1, Player p2) { // we are referring to the next move, so not the one is moving right now
+        if (p1.turn) return "b ";
+        else if (p2.turn) return "w ";
+        else return "null";
+    }
+
     public static void showMovesHistory() {
         if(movesHistory.size() > 0) {
             Iterator<Move> movesIterator = movesHistory.iterator();

@@ -1,29 +1,0 @@
-
-H
-java:S1444"2Make this "public static cellSequence" field final(¼³Ï
-8
-java:S2386"Make this member "protected".(…¨åœùÿÿÿÿ
-V	java:S125"<This block of commented-out lines of code should be removed.(ËùË¤üÿÿÿÿ
-s
-java:S1104"XMake movesHistory a static final constant or non-public and provide accessors if needed.(…¨åœùÿÿÿÿ
-œ
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¡¬²§ûÿÿÿÿ
-_
-java:S1134	"DTake the required action to fix the issue indicated by this comment.(Â–åˆşÿÿÿÿ
-3
-java:S2386"Make this member "protected".(¼³Ï
-8
-java:S1118"Hide this public constructor.(¡¬²§ûÿÿÿÿ
-P
-java:S18545"5Remove this useless assignment to local variable "m".(Âéî°ûÿÿÿÿ
-A
-java:S14815"&Remove this unused "m" local variable.(Âéî°ûÿÿÿÿ
-S
-java:S11552">Use isEmpty() to check whether the collection is empty or not.(é½¤C
-n
-java:S1104"XMake cellSequence a static final constant or non-public and provide accessors if needed.(¼³Ï
-V	java:S1256"<This block of commented-out lines of code should be removed.(ĞÈ–áùÿÿÿÿ
-Z
-java:S1155Š">Use isEmpty() to check whether the collection is empty or not.(¦Á„€ûÿÿÿÿ
-M
-java:S1444"2Make this "public static movesHistory" field final(…¨åœùÿÿÿÿ
