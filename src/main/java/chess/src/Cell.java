@@ -8,7 +8,7 @@ public class Cell {
     private int x;
     private final int y;
     private Piece piece;
-    private static char[] lettersOnTheBoard = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    private static final char[] lettersOnTheBoard = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     public Cell (int x, int y, Piece piece) {
         this.piece = piece;

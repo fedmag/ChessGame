@@ -11,6 +11,7 @@ import java.util.List;
 public class GameFlow {
     public  static List<Move> movesHistory = new ArrayList<>();
     public static List<Cell> cellSequence = new ArrayList<>();
+    public static int turnCounter = 0;
 
     public GameFlow () {}
 
@@ -28,6 +29,7 @@ public class GameFlow {
         player.makeMove(board, opponent, x, y, destX, destY);
         // adding move to history
         movesHistory.add(new Move(player, x, y, destX, destY, board));
+        if(!player.isWhite()) turnCounter ++;
     }
 
     public static boolean playerCanMoveThisPiece(Player p, Board board, List<Cell> cellSequence) {

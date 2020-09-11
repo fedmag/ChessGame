@@ -136,6 +136,7 @@ public class GUIChess extends JFrame {
         if (GameFlow.thereIsWinner(p1, p2)) {
             this.winScreen();
         }
+
     }
 
 ///////////////////////////////////////////////////////

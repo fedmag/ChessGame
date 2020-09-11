@@ -33,13 +33,12 @@ public class Pawn extends Piece {
             int absDistX = Math.abs(distX);
             Piece pieceAtDest = board.pieceAtDest(destX, destY);
             if (this.movedAlready) { // not the first move of this pawn
-                //checking for enpassant
                 // in order to eat diagonally we check the pieces at the left and at the right
                 Piece leftPiece = this.getyPos() - 1 > 0 ? board.pieceAtDest(destX, this.getyPos() - 1) : null;
                 Piece rightPiece = this.getyPos() + 1 < 8 ? board.pieceAtDest(destX, this.getyPos() + 1) : null;
                 // Pawn only moves forward (if the cell is empty) or diagonally to eat
                 if (this.getWhite()) { //if white
-                    if (enPassantAvailable(destX, destY)) return enPassantAvailable(destX, destY);
+                    if (enPassantAvailable(destX, destY)) return enPassantAvailable(destX, destY); //checking for enpassant
                     if (distX == 1 && distY == 0 && pieceAtDest == null) { // base movement
                         return true;
                     } else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() // there s an opponent piece on the upper-left square
@@ -52,7 +51,7 @@ public class Pawn extends Piece {
                         return true;
                     } else return false;
                 } else { // if black
-                    if (enPassantAvailable(destX, destY)) return enPassantAvailable(destX, destY);
+                    if (enPassantAvailable(destX, destY)) return enPassantAvailable(destX, destY); //checking for enpassant
                     if (distX == -1 && distY == 0 && pieceAtDest == null) { // base movement
                         return true;
                     } else if (leftPiece != null && leftPiece.getWhite() != this.getWhite() // there s an opponent piece on the lower-left square
