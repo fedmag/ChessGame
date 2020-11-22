@@ -1,5 +1,6 @@
 package chess.src;
 
+import chess.AI.Connector;
 import chess.AI.FEN;
 import chess.GUI.WinScreen;
 import chess.pieces.*;
@@ -26,6 +27,7 @@ public class GUIChess extends JFrame {
     private String whiteName, blackName;
     private Board board = new Board();
     private final CellButton[][] cellButtons = new CellButton[8][8];
+    private boolean againstAI;
 
 
     public GUIChess(String whiteName, String blackName) {
@@ -54,6 +56,7 @@ public class GUIChess extends JFrame {
         // players
         this.p1 = new Player(whiteName, true, true);
         this.p2 = new Player(blackName, false, false);
+        if (blackName.equals("AI here!")) this.againstAI = true;
         System.out.println("Players created...");
         // logic Board
         turnPlayer.setText(GameFlow.whoseTurn(p1,p2));
@@ -62,33 +65,45 @@ public class GUIChess extends JFrame {
     }
 
     public void makeGrid(Board board) {
-            grid.setLayout(new GridLayout(8,8));
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    CellButton button = new CellButton(i, j);
-                    this.cellButtons[i][j] = button;
-                    String btnCoord = ""+i+j;
-                    button.setName(btnCoord);
-                    // naming the cell
-                    Piece piece = board.pieceAtDest(i,j);
-                    this.associateIcon(button, piece);
-                    button.setFont(new Font("FreeSans", Font.ITALIC,20)); // nice
-                    if (piece != null && piece.getWhite()) button.setForeground(Color.WHITE);
-                    // getting the click
-                    button.addActionListener(actionEvent -> {
-                        int x = Integer.parseInt(button.getName().charAt(0)+"");
-                        int y = Integer.parseInt(button.getName().charAt(1)+"");
-                        // Ignore click on empty cell as first click of the round
-                        if (board.cellAtIsEmpty(x,y) && GameFlow.cellSequence.size()==0) {}
-                        else this.buttonClicked(button, p1, p2, board);
-                    });
-                    grid.add(button);
-                }
+        grid.setLayout(new GridLayout(8,8));
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                CellButton button = new CellButton(i, j);
+                this.cellButtons[i][j] = button;
+                String btnCoord = "" + i + j;
+                button.setName(btnCoord);
+                // naming the cell
+                Piece piece = board.pieceAtDest(i, j);
+                this.associateIcon(button, piece);
+                button.setFont(new Font("FreeSans", Font.ITALIC, 20)); // nice
+                if (piece != null && piece.getWhite()) button.setForeground(Color.WHITE);
+                // getting the click
+                button.addActionListener(actionEvent -> {
+                    int x = Integer.parseInt(button.getName().charAt(0) + "");
+                    int y = Integer.parseInt(button.getName().charAt(1) + "");
+                    // Ignore click on empty cell as first click of the round
+                    if (board.cellAtIsEmpty(x, y) && GameFlow.cellSequence.size() == 0) {}
+                    else this.buttonClicked(button, p1, p2, board);
+                });
+            grid.add(button);
             }
-            add(mainPanel);
+        }
+        if (p2.turn && this.againstAI) { // AI's turn
+        System.out.println("AI detected");
+        String fen = FEN.translateToFEN(this.board, this.p1, this.p2);
+        fen = Connector.requestBestMove(fen);
+        int fromX = 8 - Integer.parseInt(""+fen.charAt(1));
+        int fromY = Cell.letterToNumb(fen.charAt(0));
+        int toX = 8 - Integer.parseInt(""+fen.charAt(3));
+        int toY = Cell.letterToNumb(fen.charAt(2));
+        this.cellButtons[fromX][fromY].doClick();
+        this.cellButtons[toX][toY].doClick();
+        }
+        add(mainPanel);
     }
 
     private void buttonClicked(CellButton button, Player p1, Player p2, Board board) {
+        System.out.println("Button clicked");
         GameFlow.cellSequence.add(board.getCell(button.getCoordX(), button.getCoordY()));
         // first move  of the round and p1 can move the selected piece
         if (GameFlow.cellSequence.size() == 1 && GameFlow.playerCanMoveThisPiece(p1, board, GameFlow.cellSequence)) {
@@ -104,10 +119,12 @@ public class GUIChess extends JFrame {
             if (p1.turn && GameFlow.pieceCanMoveLikeRequested(board, GameFlow.cellSequence)) {  // p1's turn
                 playMove(button, this.p1, this.p2, this.board);
                 turnPlayer.setText(GameFlow.whoseTurn(p1,p2));
-            } else if (p2.turn && GameFlow.pieceCanMoveLikeRequested(board, GameFlow.cellSequence)) { // p2's turn
+            } else if (p2.turn && GameFlow.pieceCanMoveLikeRequested(board, GameFlow.cellSequence) && !this.againstAI) { // p2's turn
                 playMove(button, this.p2, this.p1, this.board);
                 turnPlayer.setText(GameFlow.whoseTurn(p1,p2));
-            } else { // invalid move
+            } else if (p2.turn && this.againstAI) {
+                System.out.println("smtg detected");
+            }else { // invalid move
                 GameFlow.cellSequence.clear();
                 updateUI(board);
             }
@@ -171,7 +188,6 @@ public class GUIChess extends JFrame {
     }
 
     public void updateUI (Board board) {
-        String c = FEN.translateToFEN(this.board, this.p1, this.p2);
         // grid
         grid.removeAll();
         this.makeGrid(board);

@@ -19,7 +19,7 @@ public class FEN {
         finalFENString = castlingStatus(finalFENString, board, p1, p2);
         finalFENString = enPassantStatus(finalFENString, board, p1, p2);
         finalFENString = turnCounterStatus(finalFENString, board, p1, p2);
-        System.out.println(finalFENString.toString());
+//        System.out.println(finalFENString.toString());
         return finalFENString.toString();
     }
 

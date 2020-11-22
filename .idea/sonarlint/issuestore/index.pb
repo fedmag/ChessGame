@@ -28,3 +28,11 @@ O
 src/main/java/chess/AI/FEN.java,d/5/d5ab22cfffe849e1f4906984fe274e1730290a42
 S
 #src/main/java/chess/src/Player.java,d/a/da266be217146a7d7a92c2767b3794e66d4a7765
+T
+$src/main/java/chess/pieces/Pawn.java,a/a/aa9b1d6db684b7768cab8171325f0041778709bb
+Q
+!src/main/java/chess/src/Move.java,a/7/a74d14a61d0cd5c225651830f05959be0668aba3
+Q
+!src/main/java/chess/src/Cell.java,6/0/604367f46b65250120cc1c9a51519bb2d2564974
+U
+%src/main/java/chess/AI/Connector.java,2/4/24621ef883cdf3ef8576aaa08cc29b2e92a29422
