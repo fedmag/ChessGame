@@ -2,11 +2,19 @@ package chess.src;
 
 import chess.pieces.*;
 
+/**
+ * Keeps the state of the game, stores the position of each piece
+ */
 public class Board {
     public Board() {}
 
     private Cell[][] board= new Cell[8][8];
 
+    /**
+     * Builds the board and places the pieces
+     * @param p1 Player, first player
+     * @param p2 Player, second player
+     */
     public void buildBoard(Player p1, Player p2) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -34,10 +42,16 @@ public class Board {
         board[7][6].setPiece(new Knight(true, 7,6));
         board[7][7].setPiece(new Rook(true, 7,7));
 
-        givePiecesToPlayer(this, p1, p2);
+        givePiecesToPlayer(p1, p2);
     }
 
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public boolean isEmpty (int x, int y) {
         return board[x][y] == null;
     }
@@ -47,19 +61,41 @@ public class Board {
         return piece == null;
     }
 
+    /**
+     * Select a piece on the board
+     * @param x x coordinate (row)
+     * @param y y coordinate (col)
+     * @return a piece on the board
+     */
     public Piece movingPiece (int x, int y) {
         return board[x][y].getPiece();
     }
 
+    // TODO: these two methods are pretty similar, might be merged
+    /**
+     * Retrieve the piece on a cell
+     * @param x x coordinate (row)
+     * @param y y coordinate (col)
+     * @return a piece on the board
+     */
     public Piece pieceAtDest (int x, int y) {
         if (!isEmpty(x,y)) return board[x][y].getPiece();
         else return null;
     }
 
+    /**
+     * Set the piece on a cell
+     * @param x x coordinate (row)
+     * @param y y coordinate (col)
+     * @param piece the piece to place on the cell
+     */
     public void setPieceAtCell (int x, int y, Piece piece) {
         board[x][y].setPiece(piece);
     }
 
+    /**
+     * Draw the board status in the terminal
+     */
     public void drawBoard() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -73,7 +109,12 @@ public class Board {
         }
     }
 
-    public void givePiecesToPlayer (Board board, Player p1, Player p2) {
+    /**
+     * Assignes the pieces to each player
+     * @param p1 Player, first player
+     * @param p2 Player, second player
+     */
+    public void givePiecesToPlayer(Player p1, Player p2) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Piece piece = this.movingPiece(i, j);
@@ -87,6 +128,12 @@ public class Board {
         }
     }
 
+    /**
+     * Retrieve a cell give the coordinates
+     * @param x x coordinate (row)
+     * @param y y coordinate (col)
+     * @return a cell give the coordinates
+     */
     public Cell getCell (int x, int y) {
         return board[x][y];
     }

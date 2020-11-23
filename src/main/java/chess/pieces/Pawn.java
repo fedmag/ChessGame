@@ -13,6 +13,10 @@ public class Pawn extends Piece {
         super("pawn", white, x, y);
     }
 
+    /**
+     * The pawn can be promoted to a new piece, checks if that's the case
+     * @return if the pawn must be promoted
+     */
     public boolean checkPromotion() {
         if (this.getWhite() && this.getxPos() == 0) {
 //            System.out.println("this pawn is getting promoted!");
@@ -24,7 +28,8 @@ public class Pawn extends Piece {
         return false;
     }
 
-    @Override
+
+    @Override //FIXME in some cases the pawn it s able to move back
     public boolean canMove(int destX, int destY, Board board) {
         // if the move is within the board -> is legit
         if (legitMove(destX, destY)) {
@@ -64,13 +69,23 @@ public class Pawn extends Piece {
                         return true;
                     } else return false;
                 }
-            } else { // first move of the match for that pawn
-                return (absDistX == 2 && distY == 0) || ((absDistX == 1 && distY == 0)); // normal move can still be performed
+            } else { // first move of the match for that pawn // FIXME the pawn must me able to eat diagonlly even tho is its first move
+                if ((absDistX == 2 && distY == 0) || ((absDistX == 1 && distY == 0))) { // normal move can still be performed
+                    if (this.getWhite() & destX < this.getxPos()) return true;
+                    else if (!this.getWhite() & destX > this.getxPos()) return true;
+                }
             }
+        }
         // in general the move is not possible
-        } else return false;
+        return false;
     }
 
+    /**
+     * Checks if it's possible to perform an en-passant
+     * @param destX new x location
+     * @param destY new y location
+     * @return if it's possible to perform an en-passant
+     */
     public boolean enPassantAvailable(int destX, int destY) {
         if ((this.getWhite() && this.getxPos() == 3) || (!this.getWhite() && this.getxPos() == 4)) { // white side
             String[] cells = GameFlow.getLastMoveCells().split(" -> ");
@@ -92,6 +107,6 @@ public class Pawn extends Piece {
     @Override
     public void move(int destX, int destY, Board board) {
         super.move(destX, destY, board);
-        this.movedAlready = true;
+        if(!this.movedAlready)this.movedAlready = true;
     }
 }

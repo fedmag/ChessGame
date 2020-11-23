@@ -37,6 +37,10 @@ public class Queen extends Piece {
         return false;
     }
 
+    /**
+     * Used to store available empty cells around the queen, used to prevent movements on other pieces
+     * @param board the current board
+     */
     private void checkSurroundings(Board board) {
         int queenX = this.getxPos();
         int queenY = this.getyPos();

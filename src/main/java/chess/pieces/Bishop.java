@@ -32,6 +32,10 @@ public class Bishop extends Piece{
         return false;
     }
 
+    /**
+     * Used to store available empty cells around the bishop, used to prevent movements on other pieces
+     * @param board the current board
+     */
     // FIXME depending on the posisition of the bishop the most extreme cells are not considered available
     private void checkSurroundings(Board board) {
         int bishopX = this.getxPos();

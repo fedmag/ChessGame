@@ -15,6 +15,9 @@ import java.awt.*;
 // - add an indicator for the selected piece
 // - add an indicator for the turn
 
+/**
+ * Creates and manges the GUI
+ */
 public class GUIChess extends JFrame {
 
     private JPanel mainPanel, grid, menu;
@@ -30,6 +33,11 @@ public class GUIChess extends JFrame {
     private boolean againstAI;
 
 
+    /**
+     * Constructor
+     * @param whiteName name of the white player
+     * @param blackName name of the black player
+     */
     public GUIChess(String whiteName, String blackName) {
         super("ChessGame");
         setSize(850, 800);
@@ -51,6 +59,11 @@ public class GUIChess extends JFrame {
         setVisible(true); // must be the last one otherwise the buttons won't show up as this makes visible only what's there when it is called, not after
     }
 
+    /**
+     * Initializes the default settings
+     * @param whiteName name of the white player
+     * @param blackName name of the black player
+     */
     private void initSettings(String whiteName, String blackName) {
         // initializing:
         // players
@@ -64,6 +77,10 @@ public class GUIChess extends JFrame {
         System.out.println("Board created...");
     }
 
+    /**
+     * Creates the board graphically
+     * @param board current status of the board
+     */
     public void makeGrid(Board board) {
         grid.setLayout(new GridLayout(8,8));
         for (int i = 0; i < 8; i++) {
@@ -102,6 +119,13 @@ public class GUIChess extends JFrame {
         add(mainPanel);
     }
 
+    /**
+     * What happens when a cell (button) is pressed
+     * @param button cell selected
+     * @param p1 Player, first player
+     * @param p2 Player, second player
+     * @param board current status of the board
+     */
     private void buttonClicked(CellButton button, Player p1, Player p2, Board board) {
         System.out.println("Button clicked");
         GameFlow.cellSequence.add(board.getCell(button.getCoordX(), button.getCoordY()));
@@ -137,6 +161,13 @@ public class GUIChess extends JFrame {
         }
     }
 
+    /**
+     * Manages the click associated with the selection of 2 cells (starting and landing cell)
+     * @param button pressed button
+     * @param p1 Player, first player
+     * @param p2 Player, second player
+     * @param board current status of the board
+     */
     private void playMove(CellButton button, Player p1, Player p2, Board board) {
         if (GameFlow.cellSequence.size() > 1) { // two cells selected
             GameFlow.playRound(GameFlow.cellSequence, p1, p2, board);
@@ -146,7 +177,7 @@ public class GUIChess extends JFrame {
             this.updateUI(board);
             // changing turns
             GameFlow.nextRound(p1, p2);
-        } else {
+        } else { // only the first cell is selected
             System.out.println("select next cell..");
             this.colorPossibleCells(button);
         }
@@ -160,17 +191,19 @@ public class GUIChess extends JFrame {
 ///////////////////     GUI    ///////////////////////
 //////////////////////////////////////////////////////
 
+    /**
+     * Creates a win screen when a winner is detected
+     */
     private void winScreen() {
         new WinScreen(GameFlow.whoWon(this.p1, this.p2));
         dispose();
     }
 
-    private void restartGame() {
-        GameFlow.movesHistory.clear();
-        dispose();
-        new PlayerNames();
-    }
 
+    /**
+     * Change the color of the cell on which the selected piece can move
+     * @param button the cell on which the piece of interest lies
+     */
     private void colorPossibleCells(CellButton button) {
         String coord = button.getName();
         int x = Integer.parseInt(coord.charAt(0)+"");
@@ -187,6 +220,10 @@ public class GUIChess extends JFrame {
         }
     }
 
+    /**
+     * Updates the GUI
+     * @param board current state of the game
+     */
     public void updateUI (Board board) {
         // grid
         grid.removeAll();
@@ -201,6 +238,10 @@ public class GUIChess extends JFrame {
         menu.repaint();
     }
 
+    /**
+     * Adds the performed moves in the panel
+     * @param movesList list of all moves performed
+     */
     private void populateHistory(JTextArea movesList) {
         movesList.setText("");
         for(Move m: GameFlow.movesHistory) {
@@ -208,6 +249,9 @@ public class GUIChess extends JFrame {
         }
     }
 
+    /**
+     * Creates the menu with the player name that indicates the turn
+     */
     // FIXME fix the turn layout
     public void createMenu () {
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
@@ -217,6 +261,11 @@ public class GUIChess extends JFrame {
         menu.add(turnPlayer);
     }
 
+    /**
+     * Associate the icon to each button according to the piece on the cell
+     * @param button cell on the board
+     * @param piece piece on the cell
+     */
     private void associateIcon(CellButton button, Piece piece) {
         if (piece != null){
             if (piece.getPieceName().equals("bishop")) {

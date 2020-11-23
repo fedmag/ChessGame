@@ -95,10 +95,18 @@ public class Rook extends Piece {
         }
     }
 
+    /**
+     * Checks if castling was performed
+     * @return if castling was performed
+     */
     public boolean isCastlingDone() {
         return castlingDone;
     }
 
+    /**
+     * Sets the castling
+     * @param castlingDone boolean, indicates if the castling was already performed
+     */
     public void setCastlingDone(boolean castlingDone) {
         this.castlingDone = castlingDone;
     }

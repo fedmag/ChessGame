@@ -52,10 +52,18 @@ public class King extends Piece {
         } return false;
     }
 
+    /**
+     * Checks if castling was performed
+     * @return if castling was performed
+     */
     public boolean isCastlingDone() {
         return castlingDone;
     }
 
+    /**
+     * Sets the castling
+     * @param castlingDone boolean, indicates if the castling was already performed
+     */
     public void setCastlingDone(boolean castlingDone) {
         this.castlingDone = castlingDone;
     }

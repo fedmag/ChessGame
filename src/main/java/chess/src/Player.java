@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Class storing all the player information and possibilities
+ */
 public class Player {
 
     private String name = "";
@@ -14,24 +17,46 @@ public class Player {
     boolean turn = false;
     private ArrayList<Piece> pieces = new ArrayList<Piece>();
 
+    /**
+     * Constructor
+     * @param name player's name
+     * @param white true if the player uses white pieces
+     * @param startingPlayer true if the player makes the first move
+     */
     public Player(String name, boolean white, boolean startingPlayer) {
         this.name = name;
         this.white = white;
         this.turn = startingPlayer;
     }
 
+    /**
+     * Checks if the player uses white pieces
+     * @return if the player uses white pieces
+     */
     public boolean isWhite() {
         return white;
     }
 
+    /**
+     * Adds pieces to the internal list of pieces associated to each player
+     * @param piece piece to assign
+     */
     public void addPiece(Piece piece) {
         this.pieces.add(piece);
     }
 
+    /**
+     * Get player's name
+     * @return player's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Removes pieces to the internal list of pieces associated to each player
+     * @param piece piece to remove
+     */
     public void removePiece(Piece piece) {
         this.pieces.remove(piece);
     }
