@@ -1,7 +1,6 @@
 # ChessGame
-Simple CheesGame with Swing.
-
-The initial project is to implement the standard rules of chess while creating an GUI with Swing and Stockfish chess engine.
+Simple CheesGame with Swing. 
+All special moves (promotion, en-passant, castling) are now successfully implemented
 <p align="center">
   <img src="https://github.com/fedmag/ChessGame/blob/master/Screenshots/name.png?raw=true" alt="name selection window"/>
 </p>
